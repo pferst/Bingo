@@ -1,3 +1,15 @@
-div{
+:host{
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px,1fr));
+  /*grid-template-rows: 100px;*/
+  /*grid-auto-flow: column;*/
+  row-gap: 10px;
+  column-gap: 10px;
+  justify-content: stretch;
+  align-items: stretch;
+}
+@media(min-width: 769px){
+  :host {
+    grid-template-columns: repeat(3, minmax(230px, 1fr));
+  }
 }

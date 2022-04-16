@@ -1,5 +1,6 @@
 <div *ngFor="let text of texts" class="textTable">
   <app-board-field
     [data]="text"
+    (click)="mark()"
   ></app-board-field>
 </div>
