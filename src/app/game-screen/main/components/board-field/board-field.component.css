@@ -5,3 +5,6 @@
 /*  align-items: center;*/
 /*  justify-content: center;*/
 /*}*/
+:host{
+  display: flex;
+}

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-board-field',
@@ -7,14 +7,26 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class BoardFieldComponent implements OnInit {
   @Input() data: string;
-  disabled: boolean = false;
+  checked: boolean = false;
+  @ViewChild('field') field: any;
+  @Output() mark: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor() { }
+  constructor(private renderer: Renderer2) { }
 
   ngOnInit(): void {
   }
 
   choose(): void {
-    this.disabled = !this.disabled;
+    this.checked = !this.checked;
+    this.mark.emit(this.checked);
+    if(this.checked) {
+      this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(185, 28, 28)');
+    }
+    else{
+      this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(243 244 246)');
+    }
+  }
+  revoke($event: any): void {
+    $event.preventDefault();
   }
 }
