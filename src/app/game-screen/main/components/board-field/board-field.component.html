@@ -1,3 +1,5 @@
-<div class="flex w-full h-40 items-center justify-center text-ellipsis overflow-hidden default:bg-gray-100 border-2 border-gray-50 rounded-lg hover:bg-gray-200 hover:underline active:bg-red-500">
+<button [disabled]="disabled"
+        (click)="choose()"
+        class="flex w-full h-40 items-center justify-center text-ellipsis overflow-hidden default:bg-gray-100 border-2 border-gray-50 rounded-lg hover:bg-gray-200 hover:underline disabled:bg-red-500">
   {{data}}
-</div>
+</button>

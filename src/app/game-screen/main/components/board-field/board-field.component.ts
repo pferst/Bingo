@@ -7,10 +7,14 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class BoardFieldComponent implements OnInit {
   @Input() data: string;
+  disabled: boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  choose(): void {
+    this.disabled = !this.disabled;
+  }
 }
