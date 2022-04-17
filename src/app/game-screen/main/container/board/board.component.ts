@@ -7,16 +7,16 @@ import {IAnswer} from "../../../../Models/IAnswer";
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
-  @Input() texts: Array<string>;
+  @Input() texts: Array<IAnswer>;
   @Output() click: EventEmitter<IAnswer> = new EventEmitter<IAnswer>();
+  toMark: {checked: boolean, answer: IAnswer};
 
   constructor() { }
 
   ngOnInit(): void {
   }
-
-  mark($event?: IAnswer) {
-    console.log($event);
+  mark($event): void {
+    this.toMark = $event;
+    console.log(this.toMark);
   }
-
 }

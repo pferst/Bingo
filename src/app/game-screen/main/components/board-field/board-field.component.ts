@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import {IAnswer} from "../../../../Models/IAnswer";
 
 @Component({
   selector: 'app-board-field',
@@ -6,10 +7,10 @@ import {Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild} fr
   styleUrls: ['./board-field.component.css']
 })
 export class BoardFieldComponent implements OnInit {
-  @Input() data: string;
+  @Input() data: IAnswer;
   checked: boolean = false;
   @ViewChild('field') field: any;
-  @Output() mark: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() mark: EventEmitter<{checked: boolean, answer: IAnswer}>= new EventEmitter<{checked: null, answer: null}>();
 
   constructor(private renderer: Renderer2) { }
 
@@ -18,7 +19,7 @@ export class BoardFieldComponent implements OnInit {
 
   choose(): void {
     this.checked = !this.checked;
-    this.mark.emit(this.checked);
+    this.mark.emit({checked: this.checked, answer: this.data});
     if(this.checked) {
       this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(185, 28, 28)');
     }
