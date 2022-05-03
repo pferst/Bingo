@@ -9,7 +9,7 @@ import {IAnswer} from "../../../../Models/IAnswer";
 export class BoardComponent implements OnInit {
   @Input() texts: Array<IAnswer>;
   @Output() click: EventEmitter<IAnswer> = new EventEmitter<IAnswer>();
-  toMark: {checked: boolean, answer: IAnswer};
+  toMark: {to_check: boolean, answer: IAnswer};
 
   constructor() { }
 

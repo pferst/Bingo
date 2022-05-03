@@ -10,7 +10,7 @@ export class BoardFieldComponent implements OnInit {
   @Input() data: IAnswer;
   checked: boolean = false;
   @ViewChild('field') field: any;
-  @Output() mark: EventEmitter<{checked: boolean, answer: IAnswer}>= new EventEmitter<{checked: null, answer: null}>();
+  @Output() mark: EventEmitter<{to_check: boolean, answer: IAnswer}>= new EventEmitter<{to_check: null, answer: null}>();
 
   constructor(private renderer: Renderer2) { }
 
@@ -19,7 +19,7 @@ export class BoardFieldComponent implements OnInit {
 
   choose(): void {
     this.checked = !this.checked;
-    this.mark.emit({checked: this.checked, answer: this.data});
+    this.mark.emit({to_check: this.checked, answer: this.data});
     if(this.checked) {
       this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(185, 28, 28)');
     }
