@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {IAnswer} from "../../../../Models/IAnswer";
+import {IText} from "../../../../Models/IText";
 
 @Component({
   selector: 'app-main-screen',
@@ -7,7 +7,7 @@ import {IAnswer} from "../../../../Models/IAnswer";
   styleUrls: ['./main-screen.component.css']
 })
 export class MainScreenComponent implements OnInit {
-  texts: Array<IAnswer> = [
+  texts: Array<IText> = [
     {
       id: 1,
       text: "yes"
