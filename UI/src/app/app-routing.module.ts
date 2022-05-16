@@ -4,6 +4,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {JoinGameComponent} from "./join-game/join-game.component";
 import {CreateGameComponent} from "./create-game/create-game.component";
 import {MainScreenComponent} from "./game-screen/main/container/main-screen/main-screen.component";
+import {JoinCreateComponent} from "./join-create/join-create.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: ':id',
     component: MainScreenComponent
+  },
+  {
+    path: '',
+    component: JoinCreateComponent
   }
 ];
 

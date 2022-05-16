@@ -17,6 +17,8 @@ import { JoinGameComponent } from './join-game/join-game.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from "@angular/router";
 import { MainService } from "./main.service";
+import { JoinCreateComponent } from './join-create/join-create.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { MainService } from "./main.service";
     BoardComponent,
     BoardFieldComponent,
     CreateGameComponent,
-    JoinGameComponent
+    JoinGameComponent,
+    JoinCreateComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,8 @@ import { MainService } from "./main.service";
     AppRoutingModule,
     RouterModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    MatTableModule
   ],
   providers: [MainService],
   bootstrap: [AppComponent]

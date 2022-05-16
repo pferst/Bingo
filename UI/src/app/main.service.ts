@@ -11,10 +11,10 @@ import {IPlayer} from "./Models/IPlayer";
 export class MainService {
 
   readonly API = environment;
-  // readonly games = '/games'; players = 'players';
 
   constructor(private http: HttpClient) { }
 
+  // game
   getGameList(): Observable<IGame[]> {
     return this.http.get<IGame[]>(this.API.game);
   }
@@ -30,6 +30,7 @@ export class MainService {
     return this.http.delete(`${this.API.game}/${id}`);
   }
 
+  // player
   getPlayerList(): Observable<IPlayer[]> {
     return this.http.get<IPlayer[]>(this.API.player);
   }
@@ -41,5 +42,4 @@ export class MainService {
   updatePlayer(id:number|string, data: IPlayer) {
     return this.http.put(`${this.API.player}/${id}`, data);
   }
-
 }
