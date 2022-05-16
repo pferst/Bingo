@@ -12,6 +12,9 @@ import {MatIconModule} from "@angular/material/icon";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { MatButtonModule } from '@angular/material/button';
+import { JoinGameComponent } from './join-game/join-game.component';
+import { AppRoutingModule } from './app-routing.module';
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -19,7 +22,8 @@ import { MatButtonModule } from '@angular/material/button';
     MainScreenComponent,
     BoardComponent,
     BoardFieldComponent,
-    CreateGameComponent
+    CreateGameComponent,
+    JoinGameComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +32,9 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    AppRoutingModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
