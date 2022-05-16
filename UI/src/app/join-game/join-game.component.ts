@@ -14,7 +14,8 @@ export class JoinGameComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameDetails = this.fb.group({
-      gameId: ['', Validators.required]
+      gameId: ['', Validators.required],
+      playerName: ['', Validators.required]
     });
   }
 
