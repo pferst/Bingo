@@ -1,13 +1,14 @@
 <form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-center items-center flex-col w-full h-full">
   <mat-form-field appearance="outline">
-    <mat-label>Enter game id</mat-label>
-    <input matInput placeholder="game ID" formControlName="gameId" required>
-    <mat-error *ngIf="gameDetails.invalid">{{getErrorMessage()}}</mat-error>
+    <mat-label>Enter name for your server</mat-label>
+    <input matInput placeholder="Server name" formControlName="gameId" required>
   </mat-form-field>
-  <div *ngFor="let text of Texts().controls; let i=index" [formGroupName]="i">
-    <mat-form-field appearance="outline">
-      <input matInput placeholder="text" formControlName="textVal" required>
-    </mat-form-field>
-  </div>
+  <ng-container container formArrayName="texts">
+    <ng-container *ngFor="let textForm of texts.controls; let i=index" [formGroupName]="i">
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="text" formControlName="id" required>
+        </mat-form-field>
+    </ng-container>
+  </ng-container>
   <button mat-flat-button type="submit" color="primary" [disabled]="!gameDetails.valid">CREATE</button>
 </form>
