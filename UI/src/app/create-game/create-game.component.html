@@ -1,4 +1,4 @@
-<form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-center items-center flex-col w-full h-full">
+<form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-center items-center flex-col w-full overflow-scroll py-3">
   <mat-form-field appearance="outline">
     <mat-label>Enter name for your server</mat-label>
     <input matInput placeholder="Server name" formControlName="gameId" required>
@@ -10,5 +10,9 @@
         </mat-form-field>
     </ng-container>
   </ng-container>
+  <mat-form-field appearance="outline">
+    <mat-label>Set your nickname</mat-label>
+    <input matInput placeholder="Nickname" formControlName="playerName" required>
+  </mat-form-field>
   <button mat-flat-button type="submit" color="primary" [disabled]="!gameDetails.valid">CREATE</button>
 </form>

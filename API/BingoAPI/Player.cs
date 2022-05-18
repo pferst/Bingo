@@ -9,7 +9,8 @@ namespace BingoAPI
         [StringLength(20)]
         public string Name { get; set; } = string.Empty;
 
-        public int Points { get; set; } = 0;
+        public int Points { get; set; }
+        public int Position { get; set; }
 
         public int GameId { get; set; }
 

@@ -4,15 +4,16 @@ import { environment } from "../environments/environment";
 import {Observable} from "rxjs";
 import {IGame} from "./Models/IGame";
 import {IPlayer} from "./Models/IPlayer";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainService {
 
-  readonly API = environment;
+  private readonly API = environment;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   // game
   getGameList(): Observable<IGame[]> {
@@ -37,6 +38,10 @@ export class MainService {
 
   getPlayer(id:string|number): Observable<IPlayer> {
     return this.http.get<IPlayer>(`${this.API.player}/${id}`);
+  }
+
+  addPlayer(data: IPlayer) {
+    return this.http.post(this.API.player, data);
   }
 
   updatePlayer(id:number|string, data: IPlayer) {

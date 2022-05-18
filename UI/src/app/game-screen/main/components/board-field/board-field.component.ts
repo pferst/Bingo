@@ -21,7 +21,7 @@ export class BoardFieldComponent implements OnInit {
     this.checked = !this.checked;
     this.mark.emit({to_check: this.checked, answer: this.data});
     if(this.checked) {
-      this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(185, 28, 28)');
+      this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(221, 158, 205)');
     }
     else{
       this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(243 244 246)');

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {IText} from "../../../../Models/IText";
+import {MainService} from "../../../../main.service";
 
 @Component({
   selector: 'app-main-screen',
@@ -7,57 +8,12 @@ import {IText} from "../../../../Models/IText";
   styleUrls: ['./main-screen.component.css']
 })
 export class MainScreenComponent implements OnInit {
-  texts: Array<IText> = [
-    {
-      id: 1,
-      text: "yes",
-      checked: false
-    },
-    {
-      id: 2,
-      text: "pls",
-      checked: false
-    },
-    {
-      id: 3,
-      text: "do",
-      checked: false
-    },
-    {
-      id: 4,
-      text: "it",
-      checked: false
-    },
-    {
-      id: 5,
-      text: "snitch",
-      checked: false
-    },
-    {
-      id: 6,
-      text: "it",
-      checked: false
-    },
-    {
-      id: 7,
-      text: "is",
-      checked: false
-    },
-    {
-      id: 8,
-      text: "already",
-      checked: false
-    },
-    {
-      id: 9,
-      text: "bitch",
-      checked: false
-    },
-  ];
+  texts: Array<IText> = [];
 
-  constructor() { }
+  constructor(private mainService: MainService) { }
 
   ngOnInit(): void {
+    // this.texts = this.mainService.
   }
 
 }

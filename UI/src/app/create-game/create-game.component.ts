@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {MainService} from "../main.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-game',
@@ -10,16 +12,16 @@ export class CreateGameComponent implements OnInit {
 
   gameDetails: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private mainService: MainService, private router: Router) {
     this.gameDetails = this.fb.group({
       gameId: ['', Validators.required],
-      texts: this.fb.array([])
+      texts: this.fb.array([]),
+      playerName: ['', Validators.required]
     });
     this.addText();
   }
 
   ngOnInit(): void {
-
     console.log(this.texts.controls);
   }
 
@@ -46,5 +48,18 @@ export class CreateGameComponent implements OnInit {
 
   onSubmit() {
     console.log(this.gameDetails.value);
+    const { gameId, playerName, texts } = this.gameDetails.value;
+    this.mainService.addGame({name: gameId}).subscribe(
+      data => {
+        //apparently following line is not needed.
+        this.mainService.addPlayer({name: playerName, gameId: gameId});
+        this.router.navigateByUrl(`${data}`);
+      },
+      error => {
+        console.log("Error", error);
+      },
+      () => {
+        console.log("POST is completed");
+      });
   }
 }
