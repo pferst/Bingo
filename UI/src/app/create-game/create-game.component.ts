@@ -73,7 +73,7 @@ export class CreateGameComponent implements OnInit {
             console.log("Error", error)
           },
           () => {
-            this.mainService.addPlayer({name: playerName, gameId: gameId}).subscribe(
+            this.mainService.addPlayer({name: playerName, gameId: gameData.id, points: 0, position: 0}).subscribe(
               data => playerData=data,
               error => console.log("Error", error),
               () => {}
