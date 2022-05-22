@@ -89,7 +89,8 @@ namespace BingoAPI.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TextId = table.Column<int>(type: "int", nullable: false),
-                    PlayerId = table.Column<int>(type: "int", nullable: false)
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    Checked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

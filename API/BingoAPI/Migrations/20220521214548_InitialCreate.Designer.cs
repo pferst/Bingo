@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BingoAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220518071703_InitialCreate")]
+    [Migration("20220521214548_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,6 +100,9 @@ namespace BingoAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<bool>("Checked")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");

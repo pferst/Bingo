@@ -99,6 +99,9 @@ namespace BingoAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
+                    b.Property<bool>("Checked")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 

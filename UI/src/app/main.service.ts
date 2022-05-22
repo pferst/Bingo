@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {IGame} from "./Models/IGame";
 import {IPlayer} from "./Models/IPlayer";
 import {Router} from "@angular/router";
+import {IText} from "./Models/IText";
 
 @Injectable({
   providedIn: 'root'
@@ -47,4 +48,17 @@ export class MainService {
   updatePlayer(id:number|string, data: IPlayer) {
     return this.http.put(`${this.API.player}/${id}`, data);
   }
+
+  // Texts
+  getTextList(): Observable<IText[]> {
+    return this.http.get<IText[]>(this.API.text);
+  }
+  addTexts(texts: IText[]) {
+    let textsAPI = [];
+    for(let el of texts) {
+      textsAPI.push({value: el['value']});
+    }
+    return this.http.post(this.API.text, textsAPI);
+  }
+
 }

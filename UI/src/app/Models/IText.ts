@@ -1,5 +1,5 @@
 export interface IText {
-  id: number;
-  text: string;
-  checked: Boolean;
+  id?: number;
+  value: string;
+  checked?: Boolean;
 }

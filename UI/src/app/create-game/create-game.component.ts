@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MainService} from "../main.service";
 import {Router} from "@angular/router";
+import {IGame} from "../Models/IGame";
 
 @Component({
   selector: 'app-create-game',
@@ -22,13 +23,15 @@ export class CreateGameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.texts.controls);
+    // console.log(this.texts.controls);
+    this.mainService.getTextList().subscribe(
+      data => console.log(data)
+    );
   }
 
   createText(id: number): FormGroup {
     return this.fb.group({
-      id: [''],
-      text: [''],
+      value: [''],
     });
   }
 
@@ -47,19 +50,40 @@ export class CreateGameComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.gameDetails.value);
+    // console.log(this.gameDetails.value);
     const { gameId, playerName, texts } = this.gameDetails.value;
+    let gameData, playerData, textData = null;
+
+    // console.log(textsAPI);
     this.mainService.addGame({name: gameId}).subscribe(
       data => {
         //apparently following line is not needed.
-        this.mainService.addPlayer({name: playerName, gameId: gameId});
-        this.router.navigateByUrl(`${data}`);
+        gameData = data;
       },
       error => {
         console.log("Error", error);
       },
       () => {
-        console.log("POST is completed");
+        console.log("Game POST is completed");
+        this.mainService.addTexts(texts).subscribe(
+          data => {
+            textData = data;
+          },
+          error => {
+            console.log("Error", error)
+          },
+          () => {
+            this.mainService.addPlayer({name: playerName, gameId: gameId}).subscribe(
+              data => playerData=data,
+              error => console.log("Error", error),
+              () => {}
+            );
+          }
+        )
       });
+    if(gameData && playerData && textData)
+    {
+      this.router.navigateByUrl(`${gameData['name']}.${gameData['id']}`).then(r => {});
+    }
   }
 }

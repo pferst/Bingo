@@ -90,6 +90,15 @@ namespace BingoAPI.Controllers
           {
               return Problem("Entity set 'DataContext.Players'  is null.");
           }
+            player.Points = 0;
+            var players = _context.Players.Where(x => x.GameId == player.GameId);
+            int nextPosition = 1;
+            if (players.Any())
+            {
+                nextPosition = (players.OrderBy(x => x.Position).Last()).Position + 1;
+            }
+            player.Position = nextPosition;
+
             _context.Players.Add(player);
             await _context.SaveChangesAsync();
 

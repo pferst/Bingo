@@ -6,7 +6,7 @@
   <ng-container container formArrayName="texts">
     <ng-container *ngFor="let textForm of texts.controls; let i=index" [formGroupName]="i">
         <mat-form-field appearance="outline">
-          <input matInput placeholder="text" formControlName="id" required>
+          <input matInput placeholder="text" formControlName="value" required>
         </mat-form-field>
     </ng-container>
   </ng-container>

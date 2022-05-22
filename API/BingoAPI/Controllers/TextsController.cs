@@ -84,16 +84,25 @@ namespace BingoAPI.Controllers
         // POST: api/Texts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Text>> PostText(Text text)
+        public async Task<ActionResult<Text[]>> PostText(Text[] texts)
         {
-          if (_context.Texts == null)
-          {
-              return Problem("Entity set 'DataContext.Texts'  is null.");
-          }
-            _context.Texts.Add(text);
-            await _context.SaveChangesAsync();
+            if (_context.Texts == null)
+            {
+                return Problem("Entity set 'DataContext.Texts'  is null.");
+            }
+            foreach (Text text in texts)
+            {
+                _context.Texts.Add(text);
+            }
 
-            return CreatedAtAction("GetText", new { id = text.Id }, text);
+            await _context.SaveChangesAsync();
+            //new { id = x.Id }
+            var responseIds = new[]
+            {
+                new { id = 46 }
+            };
+
+            return CreatedAtAction("GetTexts", texts);
         }
 
         // DELETE: api/Texts/5
