@@ -16,7 +16,7 @@ const routes: Routes = [
     component: CreateGameComponent
   },
   {
-    path: ':id',
+    path: ':name.:id',
     component: MainScreenComponent
   },
   {

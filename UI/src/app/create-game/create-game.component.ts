@@ -76,14 +76,16 @@ export class CreateGameComponent implements OnInit {
             this.mainService.addPlayer({name: playerName, gameId: gameData.id, points: 0, position: 0}).subscribe(
               data => playerData=data,
               error => console.log("Error", error),
-              () => {}
+              () => {
+                this.router.navigateByUrl(`${gameData['name']}.${gameData['id']}`);
+              }
             );
           }
         )
       });
-    if(gameData && playerData && textData)
-    {
-      this.router.navigateByUrl(`${gameData['name']}.${gameData['id']}`).then(r => {});
-    }
+    // if(gameData && playerData && textData)
+    // {
+    //   this.router.navigateByUrl(`${gameData['name']}.${gameData['id']}`);
+    // }
   }
 }
