@@ -96,11 +96,6 @@ namespace BingoAPI.Controllers
             }
 
             await _context.SaveChangesAsync();
-            //new { id = x.Id }
-            var responseIds = new[]
-            {
-                new { id = 46 }
-            };
 
             return CreatedAtAction("GetTexts", texts);
         }

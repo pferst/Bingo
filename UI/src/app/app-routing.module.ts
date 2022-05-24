@@ -5,6 +5,8 @@ import {JoinGameComponent} from "./join-game/join-game.component";
 import {CreateGameComponent} from "./create-game/create-game.component";
 import {MainScreenComponent} from "./game-screen/main/container/main-screen/main-screen.component";
 import {JoinCreateComponent} from "./join-create/join-create.component";
+import {CanActivate} from "@angular/router";
+import {GameAuthGuard} from "./GameAuthGuard";
 
 const routes: Routes = [
   {
@@ -13,10 +15,11 @@ const routes: Routes = [
   },
   {
     path: 'create',
-    component: CreateGameComponent
+    component: CreateGameComponent,
+    canActivate: [GameAuthGuard]
   },
   {
-    path: ':name.:id',
+    path: ':name#:id',
     component: MainScreenComponent
   },
   {

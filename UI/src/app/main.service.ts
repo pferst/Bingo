@@ -6,6 +6,7 @@ import {IGame} from "./Models/IGame";
 import {IPlayer} from "./Models/IPlayer";
 import {Router} from "@angular/router";
 import {IText} from "./Models/IText";
+import {IGameText} from "./Models/IGameText";
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,10 @@ export class MainService {
     return this.http.put(`${this.API.player}/${id}`, data);
   }
 
+  deletePlayer(id:number|string){
+    return this.http.delete(`${this.API.player}/${id}`);
+  }
+
   // Texts
   getTextList(): Observable<IText[]> {
     return this.http.get<IText[]>(this.API.text);
@@ -59,6 +64,16 @@ export class MainService {
       textsAPI.push({value: el['value']});
     }
     return this.http.post(this.API.text, textsAPI);
+  }
+
+  // Game Texts
+  assignText2game(gameId: number, texts: IText[]) {
+    let gameTexts: IGameText[] = [];
+    for(let text of texts)
+    {
+      gameTexts.push({textId: text.id, gameId: gameId});
+    }
+    return this.http.post(this.API.gameText, gameTexts);
   }
 
 }

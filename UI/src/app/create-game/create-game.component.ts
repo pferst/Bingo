@@ -3,6 +3,8 @@ import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MainService} from "../main.service";
 import {Router} from "@angular/router";
 import {IGame} from "../Models/IGame";
+import {IPlayer} from "../Models/IPlayer";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-create-game',
@@ -12,6 +14,7 @@ import {IGame} from "../Models/IGame";
 export class CreateGameComponent implements OnInit {
 
   gameDetails: FormGroup;
+  player: any;
 
   constructor(private fb: FormBuilder, private mainService: MainService, private router: Router) {
     this.gameDetails = this.fb.group({
@@ -24,6 +27,7 @@ export class CreateGameComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log(this.texts.controls);
+
     this.mainService.getTextList().subscribe(
       data => console.log(data)
     );
@@ -47,6 +51,10 @@ export class CreateGameComponent implements OnInit {
 
   get texts(): FormArray {
     return this.gameDetails.get("texts") as FormArray;
+  }
+
+  redirectToGame(gameId: number, gameName: string){
+    this.router.navigateByUrl(`${gameName}#${gameId}`);
   }
 
   onSubmit() {
@@ -73,19 +81,28 @@ export class CreateGameComponent implements OnInit {
             console.log("Error", error)
           },
           () => {
-            this.mainService.addPlayer({name: playerName, gameId: gameData.id, points: 0, position: 0}).subscribe(
-              data => playerData=data,
-              error => console.log("Error", error),
+            this.mainService.assignText2game(gameData.id, textData).subscribe(
+              data => {
+                //anything
+              },
+              error => {
+                console.log("Error", error)
+              },
               () => {
-                this.router.navigateByUrl(`${gameData['name']}.${gameData['id']}`);
+                this.mainService.addPlayer({name: playerName, gameId: gameData.id, points: 0, position: 0}).subscribe(
+                  data => playerData=data,
+                  error => console.log("Error", error),
+                  () => {
+                    console.log(playerData);
+                    localStorage.setItem('player', JSON.stringify(playerData));
+                    localStorage.setItem('lastRequest', moment.now().toString());
+                    this.redirectToGame(gameData['id'], gameData['name']);
+                  }
+                );
               }
-            );
+            )
           }
         )
       });
-    // if(gameData && playerData && textData)
-    // {
-    //   this.router.navigateByUrl(`${gameData['name']}.${gameData['id']}`);
-    // }
   }
 }

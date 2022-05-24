@@ -8,6 +8,7 @@ export const environment = {
   player: "https://localhost:7185/api/players",
   game: "https://localhost:7185/api/games",
   text: "https://localhost:7185/api/texts",
+  gameText: "https://localhost:7185/api/GameTexts"
 };
 
 /*

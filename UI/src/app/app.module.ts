@@ -19,6 +19,7 @@ import { RouterModule } from "@angular/router";
 import { MainService } from "./main.service";
 import { JoinCreateComponent } from './join-create/join-create.component';
 import { MatTableModule } from '@angular/material/table';
+import {GameAuthGuard} from "./GameAuthGuard";
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { MatTableModule } from '@angular/material/table';
     FormsModule,
     MatTableModule
   ],
-  providers: [MainService],
+  providers: [MainService, GameAuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

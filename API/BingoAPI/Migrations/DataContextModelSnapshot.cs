@@ -137,7 +137,7 @@ namespace BingoAPI.Migrations
 
             modelBuilder.Entity("BingoAPI.GameText", b =>
                 {
-                    b.HasOne("BingoAPI.Game", "Gamee")
+                    b.HasOne("BingoAPI.Game", "Game")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -149,7 +149,7 @@ namespace BingoAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Gamee");
+                    b.Navigation("Game");
 
                     b.Navigation("Text");
                 });
