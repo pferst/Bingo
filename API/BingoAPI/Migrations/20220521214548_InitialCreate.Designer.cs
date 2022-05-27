@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BingoAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220515212946_InitialCreate")]
+    [Migration("20220521214548_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,29 @@ namespace BingoAPI.Migrations
                     b.ToTable("Games");
                 });
 
+            modelBuilder.Entity("BingoAPI.GameText", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TextId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("TextId");
+
+                    b.ToTable("GameTexts");
+                });
+
             modelBuilder.Entity("BingoAPI.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -60,6 +83,9 @@ namespace BingoAPI.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
@@ -69,11 +95,22 @@ namespace BingoAPI.Migrations
 
             modelBuilder.Entity("BingoAPI.PlayerText", b =>
                 {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<bool>("Checked")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 
                     b.Property<int>("TextId")
                         .HasColumnType("int");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("PlayerId");
 
@@ -98,6 +135,25 @@ namespace BingoAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Texts");
+                });
+
+            modelBuilder.Entity("BingoAPI.GameText", b =>
+                {
+                    b.HasOne("BingoAPI.Game", "Gamee")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BingoAPI.Text", "Text")
+                        .WithMany()
+                        .HasForeignKey("TextId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Gamee");
+
+                    b.Navigation("Text");
                 });
 
             modelBuilder.Entity("BingoAPI.Player", b =>

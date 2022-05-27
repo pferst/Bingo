@@ -13,6 +13,7 @@ namespace BingoAPI.Data
         public DbSet<Text> Texts { get; set; }
 
         public DbSet<PlayerText> PlayerTexts { get; set; }
+        public DbSet<GameText> GameTexts { get; set; }
 
     }
 }

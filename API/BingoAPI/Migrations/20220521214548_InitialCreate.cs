@@ -42,6 +42,7 @@ namespace BingoAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false),
+                    Position = table.Column<int>(type: "int", nullable: false),
                     GameId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -56,15 +57,44 @@ namespace BingoAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayerTexts",
+                name: "GameTexts",
                 columns: table => new
                 {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TextId = table.Column<int>(type: "int", nullable: false),
-                    PlayerId = table.Column<int>(type: "int", nullable: false)
+                    GameId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerTexts", x => new { x.TextId, x.PlayerId });
+                    table.PrimaryKey("PK_GameTexts", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_GameTexts_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GameTexts_Texts_TextId",
+                        column: x => x.TextId,
+                        principalTable: "Texts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlayerTexts",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TextId = table.Column<int>(type: "int", nullable: false),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    Checked = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerTexts", x => x.ID);
                     table.ForeignKey(
                         name: "FK_PlayerTexts_Players_PlayerId",
                         column: x => x.PlayerId,
@@ -78,6 +108,16 @@ namespace BingoAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameTexts_GameId",
+                table: "GameTexts",
+                column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameTexts_TextId",
+                table: "GameTexts",
+                column: "TextId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_GameId",
@@ -97,6 +137,9 @@ namespace BingoAPI.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "GameTexts");
+
             migrationBuilder.DropTable(
                 name: "PlayerTexts");
 

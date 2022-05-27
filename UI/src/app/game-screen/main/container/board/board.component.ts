@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
-import {IAnswer} from "../../../../Models/IAnswer";
+import {IText} from "../../../../Models/IText";
 
 @Component({
   selector: 'app-board',
@@ -7,9 +7,9 @@ import {IAnswer} from "../../../../Models/IAnswer";
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
-  @Input() texts: Array<IAnswer>;
-  @Output() click: EventEmitter<IAnswer> = new EventEmitter<IAnswer>();
-  toMark: {to_check: boolean, answer: IAnswer};
+  @Input() texts: Array<IText>;
+  @Output() click: EventEmitter<IText> = new EventEmitter<IText>();
+  toMark: {to_check: boolean, answer: IText};
 
   constructor() { }
 

@@ -86,10 +86,19 @@ namespace BingoAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Player>> PostPlayer(Player player)
         {
-          if (_context.Players == null)
-          {
-              return Problem("Entity set 'DataContext.Players'  is null.");
-          }
+            if (_context.Players == null)
+            {
+                return Problem("Entity set 'DataContext.Players'  is null.");
+            }
+            player.Points = 0;
+            IQueryable<Player>? playersIds = _context.Players.Where(x => x.GameId == player.GameId);
+            int nextPosition = 1;
+            if (playersIds.Any())
+            {
+                nextPosition = (playersIds.OrderBy(x => x.Position).Last()).Position + 1;
+            }
+            player.Position = nextPosition;
+
             _context.Players.Add(player);
             await _context.SaveChangesAsync();
 

@@ -1,0 +1,13 @@
+<form [formGroup]="gameDetails" class="flex justify-center items-center flex-col w-full h-full">
+  <mat-form-field appearance="outline">
+    <mat-label>Enter game id</mat-label>
+    <input matInput placeholder="game ID" formControlName="gameId" required>
+    <mat-error *ngIf="gameDetails.invalid">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Enter your name</mat-label>
+    <input matInput placeholder="game ID" formControlName="playerName" required>
+<!--    <mat-error *ngIf="gameDetails.invalid">{{getErrorMessage()}}</mat-error>-->
+  </mat-form-field>
+  <button mat-flat-button type="submit" color="primary" [disabled]="!gameDetails.valid">JOIN</button>
+</form>
