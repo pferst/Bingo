@@ -11,7 +11,8 @@ import {GameAuthGuard} from "./GameAuthGuard";
 const routes: Routes = [
   {
     path: 'join',
-    component: JoinGameComponent
+    component: JoinGameComponent,
+    canActivate: [GameAuthGuard]
   },
   {
     path: 'create',
@@ -24,7 +25,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: JoinCreateComponent
+    component: JoinCreateComponent,
+    canActivate: [GameAuthGuard]
   }
 ];
 

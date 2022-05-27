@@ -58,10 +58,6 @@ export class CreateGameComponent implements OnInit {
     return this.gameDetails.get("texts") as FormArray;
   }
 
-  redirectToGame(gameId: number, gameName: string){
-    this.router.navigateByUrl(`${gameName}#${gameId}`);
-  }
-
   onSubmit() {
     // console.log(this.gameDetails.value);
     const { gameId, playerName, texts } = this.gameDetails.value;
@@ -101,7 +97,7 @@ export class CreateGameComponent implements OnInit {
                     console.log(playerData);
                     localStorage.setItem('player', JSON.stringify(playerData));
                     localStorage.setItem('lastRequest', moment.now().toString());
-                    this.redirectToGame(gameData['id'], gameData['name']);
+                    this.mainService.redirectToGame(gameData['id'], gameData['name']);
                   }
                 );
               }
