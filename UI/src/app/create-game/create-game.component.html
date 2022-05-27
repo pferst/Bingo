@@ -1,18 +1,67 @@
-<form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-center items-center flex-col w-full overflow-scroll py-3">
+<h1>Create your own game</h1>
+<mat-divider class="w-full"></mat-divider>
+<form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-start items-center flex-col w-full md:w-1/5 overflow-scroll py-3">
   <mat-form-field appearance="outline">
     <mat-label>Enter name for your server</mat-label>
-    <input matInput placeholder="Server name" formControlName="gameId" maxlength="10" required>
+    <input matInput placeholder="Server name" formControlName="gameId" maxlength="10" minlength="1" required>
   </mat-form-field>
-  <ng-container container formArrayName="texts">
-    <ng-container *ngFor="let textForm of texts.controls; let i=index" [formGroupName]="i">
+<!--  <div class="flex justify-around items-baseline w-4/5 mt-4">-->
+    <h2>Bingo passwords</h2>
+<!--  </div>-->
+  <table class="mb-10">
+    <thead>
+    <tr class="w-full flex justify-between">
+      <th scope="col" class="flex justify-self-start mr-4">#</th>
+      <th scope="col" class="w-full flex justify-self-start mr-4">Password</th>
+      <th scope="col" class="flex justify-self-start">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr [formGroup]="textForm" *ngFor="let textForm of gameDetails.get('texts')['controls'];let i = index;" class="flex justify-between items-baseline">
+      <th scope="row" class="mr-4">{{i+ 1}}</th>
+      <td class="mr-4">
         <mat-form-field appearance="outline">
-          <input matInput placeholder="text" formControlName="value" maxlength="250" required>
+          <textarea matInput
+                    placeholder="text"
+                    formControlName="value"
+                    maxlength="250"
+                    minlength="1"
+                    required
+                    [matAutocomplete]="auto"
+                    (input)="selectText(i)"
+                    (focus)="selectText(i)"
+                    (change)="clearFilter()"
+          ></textarea>
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredTexts" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
-    </ng-container>
-  </ng-container>
+      </td>
+      <td>
+        <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="removeText(i)" [disabled]="texts.length<=9">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </td>
+    </tr>
+    <tr class="flex justify-center ml-0">
+      <button mat-mini-fab type="button" color="primary" aria-label="Example icon button with a menu icon" (click)="addText()" [disabled]="texts.length>=27">
+        <mat-icon>add</mat-icon>
+      </button>
+    </tr>
+    <tr *ngIf="texts.length<=9" class="flex justify-center ml-0">
+      <mat-error>Minimum number of passwords is 9</mat-error>
+    </tr>
+    </tbody>
+  </table>
+
   <mat-form-field appearance="outline">
     <mat-label>Set your nickname</mat-label>
-    <input matInput placeholder="Nickname" formControlName="playerName" maxlength="20" required>
+    <input matInput placeholder="Nickname" formControlName="playerName" maxlength="20" minlength="1" required>
   </mat-form-field>
   <button mat-flat-button type="submit" color="primary" [disabled]="!gameDetails.valid">CREATE</button>
+  <mat-error class="pl-6 pr-6 pb-4 pt-2">
+      {{emptyInput}}
+  </mat-error>
 </form>

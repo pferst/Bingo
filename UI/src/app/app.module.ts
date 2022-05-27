@@ -22,6 +22,9 @@ import { MatTableModule } from '@angular/material/table';
 import { GameAuthGuard } from "./GameAuthGuard";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
+import {RxReactiveFormsModule} from "@rxweb/reactive-form-validators";
+import { MatDividerModule } from '@angular/material/divider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,7 @@ import { SnackBarComponent } from './snack-bar/snack-bar.component';
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    RxReactiveFormsModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
@@ -47,7 +51,9 @@ import { SnackBarComponent } from './snack-bar/snack-bar.component';
     HttpClientModule,
     FormsModule,
     MatTableModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDividerModule,
+    MatAutocompleteModule
   ],
   providers: [MainService, GameAuthGuard],
   bootstrap: [AppComponent]

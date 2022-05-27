@@ -32,6 +32,7 @@ export class MainService {
   deleteGame(id:number|string){
     return this.http.delete(`${this.API.game}/${id}`);
   }
+
   redirectToGame(gameId: number, gameName: string){
     this.router.navigateByUrl(`${gameName}#${gameId}`);
   }
