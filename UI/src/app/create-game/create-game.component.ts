@@ -5,6 +5,8 @@ import {Router} from "@angular/router";
 import {IGame} from "../Models/IGame";
 import {IPlayer} from "../Models/IPlayer";
 import * as moment from "moment";
+import {SnackBarComponent} from "../snack-bar/snack-bar.component";
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'app-create-game',
@@ -16,13 +18,17 @@ export class CreateGameComponent implements OnInit {
   gameDetails: FormGroup;
   player: any;
 
-  constructor(private fb: FormBuilder, private mainService: MainService, private router: Router) {
+  constructor(private fb: FormBuilder, private mainService: MainService, private router: Router, public _snackBar: SnackBarComponent) {
     this.gameDetails = this.fb.group({
       gameId: ['', Validators.required],
       texts: this.fb.array([]),
       playerName: ['', Validators.required]
     });
-    this.addText();
+
+    for (let i = 0; i < 9; i++) {
+      this.texts.push(this.createText(i));
+    }
+
   }
 
   ngOnInit(): void {
@@ -35,14 +41,13 @@ export class CreateGameComponent implements OnInit {
 
   createText(id: number): FormGroup {
     return this.fb.group({
-      value: [''],
+      value: ['', RxwebValidators.unique()],
     });
   }
 
-  addText() {
-    for (let i = 0; i < 9; i++) {
-      this.texts.push(this.createText(i));
-    }
+  addText(i: number) {
+    let textsArray = <FormArray>this.gameDetails.controls['texts'];
+    textsArray.push(this.createText(i));
   }
 
   removeText(i:number) {

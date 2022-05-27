@@ -19,7 +19,9 @@ import { RouterModule } from "@angular/router";
 import { MainService } from "./main.service";
 import { JoinCreateComponent } from './join-create/join-create.component';
 import { MatTableModule } from '@angular/material/table';
-import {GameAuthGuard} from "./GameAuthGuard";
+import { GameAuthGuard } from "./GameAuthGuard";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SnackBarComponent } from './snack-bar/snack-bar.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import {GameAuthGuard} from "./GameAuthGuard";
     BoardFieldComponent,
     CreateGameComponent,
     JoinGameComponent,
-    JoinCreateComponent
+    JoinCreateComponent,
+    SnackBarComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,8 @@ import {GameAuthGuard} from "./GameAuthGuard";
     RouterModule,
     HttpClientModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    MatSnackBarModule
   ],
   providers: [MainService, GameAuthGuard],
   bootstrap: [AppComponent]

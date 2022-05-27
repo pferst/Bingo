@@ -1,18 +1,18 @@
 <form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-center items-center flex-col w-full overflow-scroll py-3">
   <mat-form-field appearance="outline">
     <mat-label>Enter name for your server</mat-label>
-    <input matInput placeholder="Server name" formControlName="gameId" required>
+    <input matInput placeholder="Server name" formControlName="gameId" maxlength="10" required>
   </mat-form-field>
   <ng-container container formArrayName="texts">
     <ng-container *ngFor="let textForm of texts.controls; let i=index" [formGroupName]="i">
         <mat-form-field appearance="outline">
-          <input matInput placeholder="text" formControlName="value" required>
+          <input matInput placeholder="text" formControlName="value" maxlength="250" required>
         </mat-form-field>
     </ng-container>
   </ng-container>
   <mat-form-field appearance="outline">
     <mat-label>Set your nickname</mat-label>
-    <input matInput placeholder="Nickname" formControlName="playerName" required>
+    <input matInput placeholder="Nickname" formControlName="playerName" maxlength="20" required>
   </mat-form-field>
   <button mat-flat-button type="submit" color="primary" [disabled]="!gameDetails.valid">CREATE</button>
 </form>

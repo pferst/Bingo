@@ -3,11 +3,14 @@ import {Injectable} from "@angular/core";
 import * as moment from "moment";
 import {MainService} from "./main.service";
 import {IPlayer} from "./Models/IPlayer";
+import {SnackBarComponent} from "./snack-bar/snack-bar.component";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GameAuthGuard implements CanActivate {
 
-  constructor(private router: Router, private mainService: MainService) {
+  constructor(private router: Router, private mainService: MainService, private _snackBar: SnackBarComponent) {
   }
 
   canActivate(): boolean {
@@ -18,8 +21,7 @@ export class GameAuthGuard implements CanActivate {
       const player = JSON.parse(playerStorage) as IPlayer;
       let duration = moment.duration(moment().diff(timeStamp));
       let hours = duration.asHours();
-      console.log(hours);
-      if(hours > 10)
+      if(hours > 3)
       {
         this.mainService.deletePlayer(player.id).subscribe(
           data => {
@@ -29,6 +31,7 @@ export class GameAuthGuard implements CanActivate {
             console.log("Error", error)
           },
           () => {
+            this._snackBar.openSnackBar("Previous session timed out");
             localStorage.clear();
           }
         );
