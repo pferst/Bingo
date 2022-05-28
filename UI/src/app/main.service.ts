@@ -7,6 +7,7 @@ import {IPlayer} from "./Models/IPlayer";
 import {Router} from "@angular/router";
 import {IText} from "./Models/IText";
 import {IGameText} from "./Models/IGameText";
+import * as moment from "moment";
 
 @Injectable({
   providedIn: 'root'
@@ -19,17 +20,21 @@ export class MainService {
 
   // game
   getGameList(): Observable<IGame[]> {
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.get<IGame[]>(this.API.game);
   }
   getGame(id:string|number): Observable<IGame> {
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.get<IGame>(`${this.API.game}/${id}`);
   }
 
   addGame(data: IGame) {
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.post(this.API.game, data);
   }
 
   deleteGame(id:number|string){
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.delete(`${this.API.game}/${id}`);
   }
 
@@ -37,20 +42,28 @@ export class MainService {
     this.router.navigateByUrl(`${gameName}#${gameId}`);
   }
 
+  redirectToHome() {
+    this.router.navigateByUrl('');
+  }
+
   // player
   getPlayerList(): Observable<IPlayer[]> {
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.get<IPlayer[]>(this.API.player);
   }
 
   getPlayer(id:string|number): Observable<IPlayer> {
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.get<IPlayer>(`${this.API.player}/${id}`);
   }
 
   addPlayer(data: IPlayer) {
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.post(this.API.player, data);
   }
 
   updatePlayer(id:number|string, data: IPlayer) {
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.put(`${this.API.player}/${id}`, data);
   }
 
@@ -60,9 +73,11 @@ export class MainService {
 
   // Texts
   getTextList(): Observable<IText[]> {
+    localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.get<IText[]>(this.API.text);
   }
   addTexts(texts: IText[]) {
+    localStorage.setItem('lastRequest', moment.now().toString());
     let textsAPI = [];
     for(let el of texts) {
       textsAPI.push({value: el['value']});
@@ -72,12 +87,24 @@ export class MainService {
 
   // Game Texts
   assignText2game(gameId: number, texts: IText[]) {
+    localStorage.setItem('lastRequest', moment.now().toString());
     let gameTexts: IGameText[] = [];
     for(let text of texts)
     {
       gameTexts.push({textId: text.id, gameId: gameId});
     }
     return this.http.post(this.API.gameText, gameTexts);
+  }
+
+  getTexts4Game(gameId: number) {
+    localStorage.setItem('lastRequest', moment.now().toString());
+    return this.http.get(`${this.API.gameText}/${gameId}`);
+  }
+
+  // Player Texts
+  getPlayerTexts(id: number) {
+    localStorage.setItem('lastRequest', moment.now().toString());
+    return this.http.get(`${this.API.playerTexts}/${id}`)
   }
 
 }

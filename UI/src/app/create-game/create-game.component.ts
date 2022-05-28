@@ -50,7 +50,7 @@ export class CreateGameComponent implements OnInit {
     // console.log(this.texts.controls);
 
     this.filteredTexts = this.allTexts;
-    console.log(this.filteredTexts);
+    // console.log(this.filteredTexts);
   }
 
   private _filter(value: string): string[] {
@@ -64,10 +64,10 @@ export class CreateGameComponent implements OnInit {
 
   selectText(i: number) {
     const currVal = this.texts.at(i).value.value;
-    console.log(currVal);
+    // console.log(currVal);
     if(currVal.length>0) {
       this.filteredTexts = this._filter(currVal);
-      console.log(this.filteredTexts);
+      // console.log(this.filteredTexts);
     }
     else{
       this.filteredTexts=this.allTexts;
@@ -136,7 +136,7 @@ export class CreateGameComponent implements OnInit {
         console.log("Error", error);
       },
       () => {
-        console.log("Game POST is completed");
+        // console.log("Game POST is completed");
         this.mainService.addTexts(texts).subscribe(
           data => {
             textData = data;
@@ -157,7 +157,7 @@ export class CreateGameComponent implements OnInit {
                   data => playerData=data,
                   error => console.log("Error", error),
                   () => {
-                    console.log(playerData);
+                    // console.log(playerData);
                     localStorage.setItem('player', JSON.stringify(playerData));
                     localStorage.setItem('lastRequest', moment.now().toString());
                     this.mainService.redirectToGame(gameData['id'], gameData['name']);
