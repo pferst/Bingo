@@ -40,20 +40,22 @@ export class MainScreenComponent implements OnInit {
         let gameTexts: IText[];
         this.mainService.getTexts4Game(player.gameId).subscribe(
           data => {
-            console.log("Server response", data)
+            gameTexts = data as IText[];
           },
           error => console.log("Error", error),
           () => {
-          }
-        )
-        // if(!gameTexts)
-        // {
-        //   localStorage.clear();
-        //   this.mainService.redirectToHome();
-        // }
-        // console.log(gameTexts);
-        // this.texts = this.drawTexts(gameTexts);
-        // localStorage.setItem('texts', this.texts.toString());
+
+
+            if(gameTexts==null)
+            {
+              localStorage.clear();
+              this.mainService.redirectToHome();
+            }
+            console.log(gameTexts);
+            this.texts = this.drawTexts(gameTexts);
+            this.texts.forEach(text => text.checked=false)
+            localStorage.setItem('texts', JSON.stringify(this.texts));
+          });
       }
     }
     // this.texts = this.mainService.
@@ -61,6 +63,10 @@ export class MainScreenComponent implements OnInit {
 
   drawTexts(allTexts: IText[]): IText[] {
     let n: number = 9;
+    if(allTexts.length<=n)
+    {
+      return allTexts;
+    }
     let result = new Array(n),
       len = allTexts.length,
       taken = new Array(len);
