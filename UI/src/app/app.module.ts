@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainScreenComponent } from './game-screen/main/container/main-screen/main-screen.component';
 import { BoardComponent } from './game-screen/main/container/board/board.component';
-import { BoardFieldComponent } from './game-screen/main/components/board-field/board-field.component';
+import { BoardFieldComponent, DialogOverviewExampleDialog } from './game-screen/main/components/board-field/board-field.component';
 import { CreateGameComponent } from './create-game/create-game.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatIconModule } from "@angular/material/icon";
@@ -25,6 +25,7 @@ import { SnackBarComponent } from './snack-bar/snack-bar.component';
 import {RxReactiveFormsModule} from "@rxweb/reactive-form-validators";
 import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     CreateGameComponent,
     JoinGameComponent,
     JoinCreateComponent,
-    SnackBarComponent
+    SnackBarComponent,
+    DialogOverviewExampleDialog
   ],
   imports: [
     BrowserModule,
@@ -53,7 +55,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatTableModule,
     MatSnackBarModule,
     MatDividerModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatDialogModule
   ],
   providers: [MainService, GameAuthGuard],
   bootstrap: [AppComponent]

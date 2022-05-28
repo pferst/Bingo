@@ -24,7 +24,7 @@ export class CreateGameComponent implements OnInit {
   filteredTexts: string[];
   exactText: FormControl = new FormControl();
 
-  constructor(private fb: FormBuilder, private mainService: MainService, private router: Router, public _snackBar: SnackBarComponent) {
+  constructor(private fb: FormBuilder, public mainService: MainService, private router: Router, public _snackBar: SnackBarComponent) {
     this.gameDetails = this.fb.group({
       gameId: ['', Validators.required],
       texts: this.fb.array([]),
@@ -47,10 +47,8 @@ export class CreateGameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log(this.texts.controls);
-
     this.filteredTexts = this.allTexts;
-    // console.log(this.filteredTexts);
+
   }
 
   private _filter(value: string): string[] {

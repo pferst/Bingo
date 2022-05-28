@@ -1,5 +1,6 @@
-import {Component, Input, OnInit, EventEmitter, Output} from '@angular/core';
+import {Component, Input, OnInit, EventEmitter, Output, Inject} from '@angular/core';
 import {IText} from "../../../../Models/IText";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-board',

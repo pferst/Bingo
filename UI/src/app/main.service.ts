@@ -84,6 +84,9 @@ export class MainService {
     }
     return this.http.post(this.API.text, textsAPI);
   }
+  deleteText(id: number) {
+    return this.http.delete(`${this.API.text}/${id}`);
+  }
 
   // Game Texts
   assignText2game(gameId: number, texts: IText[]) {

@@ -15,10 +15,6 @@ export class MainScreenComponent implements OnInit {
   constructor(private mainService: MainService) { }
 
   ngOnInit(): void {
-    //TODO
-    //get player.texts from localstroage
-    //if player.texts == null -> getGameTexts; draw texts for player; post playerTexts;
-    //else load them from local storage
     const textsStr: string = localStorage.getItem('texts');
     if(textsStr)
     {
@@ -58,7 +54,6 @@ export class MainScreenComponent implements OnInit {
           });
       }
     }
-    // this.texts = this.mainService.
   }
 
   drawTexts(allTexts: IText[]): IText[] {

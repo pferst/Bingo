@@ -24,6 +24,7 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder.WithOrigins("http://localhost:4200")
+            //builder.WithOrigins("http://192.168.2.2:4200")
             .AllowAnyMethod()
             .AllowAnyHeader();
         });
