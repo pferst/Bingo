@@ -104,12 +104,12 @@ export class CreateGameComponent implements OnInit {
   onSubmit() {
     // console.log(this.gameDetails.value);
     let { gameId, playerName, texts } = this.gameDetails.value;
-    // console.log("GameId: ", gameId);
+    // console.log("GameId: ", typeof gameId);
     // console.log("playerName: ", playerName);
     // console.log("texts: ", texts);
     let gameData, playerData, textData = null;
     playerName = playerName.trim();
-    gameId = gameId.Trim();
+    gameId = gameId.trim();
     if(playerName.length===0 || gameId.length===0)
     {
       this.emptyInput = "Every field has to contain at least one sign (space doesn't count)";
