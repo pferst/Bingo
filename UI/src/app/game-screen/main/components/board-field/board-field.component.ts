@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   HostListener,
@@ -18,7 +19,7 @@ import {Observable, takeUntil} from "rxjs";
   templateUrl: './board-field.component.html',
   styleUrls: ['./board-field.component.css']
 })
-export class BoardFieldComponent implements OnInit {
+export class BoardFieldComponent implements OnInit, AfterViewInit {
   @Input() data: IText;
   checked: boolean = false;
   @ViewChild('field') field: any;
@@ -28,6 +29,12 @@ export class BoardFieldComponent implements OnInit {
   constructor(private renderer: Renderer2, public dialog: MatDialog) { }
 
   ngOnInit(): void {
+  }
+  ngAfterViewInit(): void {
+    if(this.data.checked)
+    {
+      this.choose();
+    }
   }
 
   choose(): void {
