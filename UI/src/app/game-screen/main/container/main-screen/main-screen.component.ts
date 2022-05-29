@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {IText} from "../../../../Models/IText";
 import {MainService} from "../../../../main.service";
 import {IPlayer} from "../../../../Models/IPlayer";
 import {IPlayerText} from "../../../../Models/IPlayerText";
-import {error} from "@rxweb/reactive-form-validators";
-import {data} from "autoprefixer";
+import {MatDialog} from "@angular/material/dialog";
+import {CloseDialogComponent} from "../../components/close-dialog/close-dialog.component";
+import { Subscription } from "rxjs";
+import { interval } from 'rxjs';
 
 
 @Component({
@@ -12,12 +14,24 @@ import {data} from "autoprefixer";
   templateUrl: './main-screen.component.html',
   styleUrls: ['./main-screen.component.css']
 })
-export class MainScreenComponent implements OnInit {
+export class MainScreenComponent implements OnInit, OnDestroy {
   texts: Array<IText> = [];
+  players: Array<IPlayer> = [];
+  user: IPlayer = null;
+  sub: Subscription;
 
-  constructor(private mainService: MainService) { }
+  constructor(private mainService: MainService, public dialog: MatDialog) {
+    this.sub = interval(10000)
+      .subscribe((val) => { this.refreshPlayers()});
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
 
   ngOnInit(): void {
+    this.refreshPlayers();
+    //list of texts
     const textsStr: string = localStorage.getItem('texts');
     if(textsStr)
     {
@@ -44,6 +58,7 @@ export class MainScreenComponent implements OnInit {
           () => {
             if(pt.length===0)
             {
+              console.log("Tu Cię nie powinno być");
               let gameTexts: IText[];
               this.mainService.getTexts4Game(player.gameId).subscribe(
                 data => {
@@ -83,9 +98,9 @@ export class MainScreenComponent implements OnInit {
                   data => temp.push({id: data.id, value: data.value, checked: pt[i].checked}),
                   error => console.log("Error", error),
                   () => {
-                    console.log(i);
                     if(i+1==pt.length)
                     {
+                      console.log(i+1)
                       this.texts = temp;
                       localStorage.setItem('texts', JSON.stringify(this.texts));
                     }
@@ -118,5 +133,42 @@ export class MainScreenComponent implements OnInit {
     return result;
   }
 
+  leaveGame(user: IPlayer) {
+    let dialogRef = this.dialog.open(CloseDialogComponent)
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.mainService.deletePlayer(user.id).subscribe(
+          data => {},
+          error => console.log("Error", error),
+          () => {localStorage.clear(), this.mainService.redirectToHome()}
+        )
+      }
+      dialogRef = null;
+    })
+  }
+
+  refreshPlayers() {
+    //list of players
+    const playerStr: string|null = localStorage.getItem('player');
+    if(playerStr) {
+      let player: IPlayer = JSON.parse(playerStr) as IPlayer;
+      this.user = player;
+      this.mainService.getPlayerList(player.gameId).subscribe(
+        data => this.players = data as IPlayer[],
+        error => console.log("Error", error),
+        () => {
+          this.mainService.getPlayer(player.id).subscribe(
+            data => player = data as IPlayer,
+            error => console.log(player),
+            () => {
+              this.user = player;
+              localStorage.setItem('player', JSON.stringify(this.user))
+            }
+          )
+        }
+      );
+    }
+  }
 
 }
+

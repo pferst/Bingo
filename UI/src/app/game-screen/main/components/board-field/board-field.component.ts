@@ -33,20 +33,20 @@ export class BoardFieldComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     if(this.data.checked)
     {
-      this.choose();
+      this.choose(true);
     }
   }
 
-  choose(): void {
+  choose(reload: boolean = false): void {
     this.checked = !this.checked;
     console.log(this.checked);
-    if(!this.checked)
+    if(!this.checked && !reload)
     {
       const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
         data: this.data.value,
       });
       dialogRef.afterClosed().subscribe(result => {
-        if(result) this.sendRequest();
+        if(result) this.sendRequest(reload);
         else {console.log("Nie"); this.choose();}
       })
       console.log("out");
@@ -54,13 +54,15 @@ export class BoardFieldComponent implements OnInit, AfterViewInit {
     else
     {
       this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(221, 158, 205)');
-      this.mark.emit({to_check: this.checked, answer: this.data});
+      if(!reload) this.mark.emit({to_check: this.checked, answer: this.data});
     }
   }
 
-  sendRequest() {
+  sendRequest(reload: boolean = false) {
     this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(243 244 246)');
-    this.mark.emit({to_check: this.checked, answer: this.data});
+    if(!reload) {
+      this.mark.emit({to_check: this.checked, answer: this.data});
+    }
   }
 
   revoke($event: any): void {

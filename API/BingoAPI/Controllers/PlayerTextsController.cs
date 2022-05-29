@@ -40,10 +40,10 @@ namespace BingoAPI.Controllers
             {
                 return NotFound();
             }
-            var playerTextGot = _context.PlayerTexts.Where(x => x.PlayerId == id).ToList();
+            var playerTextGot = await _context.PlayerTexts.Where(x => x.PlayerId == id).ToListAsync();
             //var playerText = await _context.PlayerTexts.FindAsync(id);
 
-            if (playerTextGot == null)
+            if (playerTextGot==null)
             {
                 return NotFound();
             }
@@ -63,8 +63,52 @@ namespace BingoAPI.Controllers
 
             var playerTextGot = _context.PlayerTexts.Where(x => x.PlayerId == playerText.PlayerId && x.TextId == playerText.TextId).Take(1).ToList();
             playerTextGot[0].Checked = playerText.Checked;
+            Player playerInfo = _context.Players.Where(x => x.Id == playerText.PlayerId).First();
+
+            playerInfo.Points = playerText.Checked ? playerInfo.Points + 1 : playerInfo.Points - 1;
+            var playersFromGame = _context.Players.Where(x => x.GameId == playerInfo.GameId).OrderBy(player => player.Position).ToList();
+            if (playersFromGame.Count > 1)
+            {
+                if (playerText.Checked)
+                {
+                    bool flagUp = true;
+                    for (int i = 0; i < playersFromGame.Count; i++)
+                    {
+                        if (playerText.Checked && playerInfo.Points > playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
+                        {
+                            if (flagUp)
+                            {
+                                playerInfo.Position = playersFromGame[i].Position;
+                                flagUp = false;
+                            }
+                            playersFromGame[i].Position++;
+                        }
+                    }
+                    if (flagUp)
+                    {
+                        playerInfo.Position = playersFromGame.Last().Position + 1;
+                    }
+                }
+                else
+                {
+                    //bool flagDown = false;
+                    for (int i = 0; i < playersFromGame.Count; i++)
+                    {
+                        if (playerInfo.Points <= playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
+                        {
+                            (playerInfo.Position, playersFromGame[i].Position) = (playersFromGame[i].Position, playerInfo.Position);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                playerInfo.Position = 1;
+            }
 
             _context.Entry(playerTextGot[0]).State = EntityState.Modified;
+            //_context.Entry(playerInfo).State = EntityState.Modified;
+            //_context.Entry(playersFromGame).State = EntityState.Modified;
 
             try
             {

@@ -26,6 +26,11 @@ import {RxReactiveFormsModule} from "@rxweb/reactive-form-validators";
 import { MatDividerModule } from '@angular/material/divider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ScoreboardComponent } from './game-screen/main/components/scoreboard/scoreboard.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { CloseDialogComponent } from './game-screen/main/components/close-dialog/close-dialog.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -37,7 +42,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     JoinGameComponent,
     JoinCreateComponent,
     SnackBarComponent,
-    DialogOverviewExampleDialog
+    DialogOverviewExampleDialog,
+    ScoreboardComponent,
+    CloseDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +63,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSnackBarModule,
     MatDividerModule,
     MatAutocompleteModule,
-    MatDialogModule
+    MatDialogModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatTabsModule,
   ],
   providers: [MainService, GameAuthGuard],
   bootstrap: [AppComponent]

@@ -11,6 +11,7 @@ import {MainService} from "../../../../main.service";
 export class BoardComponent implements OnInit {
   @Input() texts: Array<IText>;
   @Output() click: EventEmitter<IText> = new EventEmitter<IText>();
+  @Output() refresh: EventEmitter<boolean> = new EventEmitter<boolean>();
   toMark: {to_check: boolean, answer: IText};
 
   constructor(private mainService: MainService) { }
@@ -25,6 +26,7 @@ export class BoardComponent implements OnInit {
       data => {},
       error => console.log("Error", error),
       () => {
+        this.refresh.emit(true);
         const str = localStorage.getItem('texts');
         if(str)
         {
@@ -36,4 +38,5 @@ export class BoardComponent implements OnInit {
     )
     // console.log(this.toMark);
   }
+
 }
