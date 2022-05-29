@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {IText} from "../../../../Models/IText";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {Observable} from "rxjs";
+import {Observable, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-board-field',
@@ -39,7 +39,9 @@ export class BoardFieldComponent implements OnInit {
       });
       dialogRef.afterClosed().subscribe(result => {
         if(result) this.sendRequest();
-      });
+        else {console.log("Nie"); this.choose();}
+      })
+      console.log("out");
     }
     else
     {
@@ -49,7 +51,6 @@ export class BoardFieldComponent implements OnInit {
   }
 
   sendRequest() {
-    localStorage.removeItem('send');
     this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(243 244 246)');
     this.mark.emit({to_check: this.checked, answer: this.data});
   }
@@ -69,7 +70,7 @@ export class DialogOverviewExampleDialog {
     @Inject(MAT_DIALOG_DATA) public data: string,
   ) {}
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
+  // onNoClick(): void {
+  //   this.dialogRef.close();
+  // }
 }

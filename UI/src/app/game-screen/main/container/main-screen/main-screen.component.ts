@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {IText} from "../../../../Models/IText";
 import {MainService} from "../../../../main.service";
 import {IPlayer} from "../../../../Models/IPlayer";
+import {IPlayerText} from "../../../../Models/IPlayerText";
 
 
 @Component({
@@ -49,8 +50,22 @@ export class MainScreenComponent implements OnInit {
             }
             console.log(gameTexts);
             this.texts = this.drawTexts(gameTexts);
-            this.texts.forEach(text => text.checked=false)
-            localStorage.setItem('texts', JSON.stringify(this.texts));
+            this.texts.forEach(text => text.checked=false);
+            let pt = Array<IPlayerText>(this.texts.length);
+            for(let i: number = 0; i < pt.length; i++)
+            {
+              pt[i] = {
+                playerId: player.id,
+                textId: this.texts[i].id,
+                checked: this.texts[i].checked as boolean
+              };
+            }
+            console.log(pt);
+            this.mainService.addPlayerTexts(pt).subscribe(
+              data => {},
+              error => console.log("Error", error),
+              () => {localStorage.setItem('texts', JSON.stringify(this.texts))}
+            );
           });
       }
     }

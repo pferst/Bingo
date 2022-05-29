@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
 import {IText} from "./Models/IText";
 import {IGameText} from "./Models/IGameText";
 import * as moment from "moment";
+import {IPlayerText} from "./Models/IPlayerText";
 
 @Injectable({
   providedIn: 'root'
@@ -109,5 +110,17 @@ export class MainService {
     localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.get(`${this.API.playerTexts}/${id}`)
   }
-
+  updatePlayerText(playerId: number, textId: number, checked: boolean) {
+    console.log("Serwis");
+    localStorage.setItem('lastRequest', moment.now().toString());
+    return this.http.put(`${this.API.playerTexts}/${playerId}`, {playerId: playerId, textId: textId, checked: checked});
+  }
+  addPlayerTexts(texts: IPlayerText[]) {
+    localStorage.setItem('lastRequest', moment.now().toString());
+    let textsAPI = [];
+    for(let el of texts) {
+      textsAPI.push(el);
+    }
+    return this.http.post(this.API.playerTexts, textsAPI);
+  }
 }

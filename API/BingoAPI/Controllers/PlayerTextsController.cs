@@ -55,12 +55,15 @@ namespace BingoAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlayerText(int id, PlayerText playerText)
         {
-            if (id != playerText.ID)
+            if (id != playerText.PlayerId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(playerText).State = EntityState.Modified;
+            var playerTextGot = _context.PlayerTexts.Where(x => x.PlayerId == playerText.PlayerId && x.TextId == playerText.TextId).Take(1).ToList();
+            playerTextGot[0].Checked = playerText.Checked;
+
+            _context.Entry(playerTextGot[0]).State = EntityState.Modified;
 
             try
             {
@@ -84,16 +87,19 @@ namespace BingoAPI.Controllers
         // POST: api/PlayerTexts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<PlayerText>> PostPlayerText(PlayerText playerText)
+        public async Task<ActionResult<PlayerText[]>> PostPlayerText(PlayerText[] playerTexts)
         {
-          if (_context.PlayerTexts == null)
-          {
-              return Problem("Entity set 'DataContext.PlayerTexts'  is null.");
-          }
-            _context.PlayerTexts.Add(playerText);
+            if (_context.PlayerTexts == null)
+            {
+                return Problem("Entity set 'DataContext.PlayerTexts'  is null.");
+            }
+            foreach (PlayerText text in playerTexts)
+            {
+                _context.PlayerTexts.Add(text);
+            }
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPlayerText", new { id = playerText.ID }, playerText);
+            return CreatedAtAction("GetPlayerTexts", playerTexts);
         }
 
         // DELETE: api/PlayerTexts/5
