@@ -52,7 +52,7 @@ namespace BingoAPI.Controllers
         }
 
         // PUT: api/PlayerTexts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754AA
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlayerText(int id, PlayerText playerText)
         {
@@ -67,43 +67,36 @@ namespace BingoAPI.Controllers
 
             playerInfo.Points = playerText.Checked ? playerInfo.Points + 1 : playerInfo.Points - 1;
             var playersFromGame = _context.Players.Where(x => x.GameId == playerInfo.GameId).OrderBy(player => player.Position).ToList();
-            if (playersFromGame.Count > 1)
+            if (playerText.Checked)
             {
-                if (playerText.Checked)
+                bool flagUp = true;
+                for (int i = 0; i < playersFromGame.Count; i++)
                 {
-                    bool flagUp = true;
-                    for (int i = 0; i < playersFromGame.Count; i++)
+                    if (playerInfo.Points > playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
                     {
-                        if (playerText.Checked && playerInfo.Points > playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
+                        if (flagUp)
                         {
-                            if (flagUp)
-                            {
-                                playerInfo.Position = playersFromGame[i].Position;
-                                flagUp = false;
-                            }
-                            playersFromGame[i].Position++;
+                            playerInfo.Position = playersFromGame[i].Position;
+                            flagUp = false;
                         }
-                    }
-                    if (flagUp)
-                    {
-                        playerInfo.Position = playersFromGame.Last().Position + 1;
+                        playersFromGame[i].Position++;
                     }
                 }
-                else
+                if (flagUp)
                 {
-                    //bool flagDown = false;
-                    for (int i = 0; i < playersFromGame.Count; i++)
-                    {
-                        if (playerInfo.Points <= playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
-                        {
-                            (playerInfo.Position, playersFromGame[i].Position) = (playersFromGame[i].Position, playerInfo.Position);
-                        }
-                    }
+                    playerInfo.Position = playersFromGame.Last().Position + 1;
                 }
             }
             else
             {
-                playerInfo.Position = 1;
+                //bool flagDown = false;
+                for (int i = 0; i < playersFromGame.Count; i++)
+                {
+                    if (playerInfo.Points <= playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
+                    {
+                        (playerInfo.Position, playersFromGame[i].Position) = (playersFromGame[i].Position, playerInfo.Position);
+                    }
+                }
             }
 
             _context.Entry(playerTextGot[0]).State = EntityState.Modified;

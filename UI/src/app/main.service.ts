@@ -53,6 +53,10 @@ export class MainService {
     return this.http.get<IPlayer[]>(`${this.API.player}/gameId=${gameId}`);
   }
 
+  checkPlayer(gameId: number, playerName: string): Observable<IPlayer[]> {
+    return this.http.get<IPlayer[]>(`${this.API.player}/gameId=${gameId}/${playerName}`);
+  }
+
   getPlayer(id:string|number): Observable<IPlayer> {
     localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.get<IPlayer>(`${this.API.player}/${id}`);
