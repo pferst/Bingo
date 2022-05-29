@@ -34,20 +34,21 @@ namespace BingoAPI.Controllers
 
         // GET: api/PlayerTexts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PlayerText>> GetPlayerText(int id)
+        public async Task<ActionResult<IEnumerable<PlayerText>>> GetPlayerText(int id)
         {
-          if (_context.PlayerTexts == null)
-          {
-              return NotFound();
-          }
-            var playerText = await _context.PlayerTexts.FindAsync(id);
+            if (_context.PlayerTexts == null)
+            {
+                return NotFound();
+            }
+            var playerTextGot = _context.PlayerTexts.Where(x => x.PlayerId == id).ToList();
+            //var playerText = await _context.PlayerTexts.FindAsync(id);
 
-            if (playerText == null)
+            if (playerTextGot == null)
             {
                 return NotFound();
             }
 
-            return playerText;
+            return playerTextGot;
         }
 
         // PUT: api/PlayerTexts/5

@@ -3,6 +3,8 @@ import {IText} from "../../../../Models/IText";
 import {MainService} from "../../../../main.service";
 import {IPlayer} from "../../../../Models/IPlayer";
 import {IPlayerText} from "../../../../Models/IPlayerText";
+import {error} from "@rxweb/reactive-form-validators";
+import {data} from "autoprefixer";
 
 
 @Component({
@@ -34,39 +36,65 @@ export class MainScreenComponent implements OnInit {
       else {
         const player: IPlayer = JSON.parse(playerStr) as IPlayer;
         console.log(player);
-        let gameTexts: IText[];
-        this.mainService.getTexts4Game(player.gameId).subscribe(
-          data => {
-            gameTexts = data as IText[];
-          },
+        // check if server has mine texts
+        let pt: IPlayerText[] = [];
+        this.mainService.getPlayerTexts(player.id).subscribe(
+          data => pt = data as IPlayerText[],
           error => console.log("Error", error),
           () => {
-
-
-            if(gameTexts==null)
+            if(pt.length===0)
             {
-              localStorage.clear();
-              this.mainService.redirectToHome();
+              let gameTexts: IText[];
+              this.mainService.getTexts4Game(player.gameId).subscribe(
+                data => {
+                  gameTexts = data as IText[];
+                },
+                error => console.log("Error", error),
+                () => {
+                  if(gameTexts==null)
+                  {
+                    localStorage.clear();
+                    this.mainService.redirectToHome();
+                  }
+                  console.log(gameTexts);
+                  this.texts = this.drawTexts(gameTexts);
+                  this.texts.forEach(text => text.checked=false);
+                  pt = Array<IPlayerText>(this.texts.length);
+                  for(let i: number = 0; i < pt.length; i++)
+                  {
+                    pt[i] = {
+                      playerId: player.id,
+                      textId: this.texts[i].id,
+                      checked: this.texts[i].checked as boolean
+                    };
+                  }
+                  console.log(pt);
+                  this.mainService.addPlayerTexts(pt).subscribe(
+                    data => {},
+                    error => console.log("Error", error),
+                    () => {localStorage.setItem('texts', JSON.stringify(this.texts))}
+                  );
+                });
             }
-            console.log(gameTexts);
-            this.texts = this.drawTexts(gameTexts);
-            this.texts.forEach(text => text.checked=false);
-            let pt = Array<IPlayerText>(this.texts.length);
-            for(let i: number = 0; i < pt.length; i++)
-            {
-              pt[i] = {
-                playerId: player.id,
-                textId: this.texts[i].id,
-                checked: this.texts[i].checked as boolean
-              };
+            else{
+              let temp = [];
+              for (let i = 0; i < pt.length; i++) {
+                this.mainService.getText(pt[i].textId).subscribe(
+                  data => temp.push({id: data.id, value: data.value, checked: pt[i].checked}),
+                  error => console.log("Error", error),
+                  () => {
+                    console.log(i);
+                    if(i+1==pt.length)
+                    {
+                      this.texts = temp;
+                      localStorage.setItem('texts', JSON.stringify(this.texts));
+                    }
+                  }
+                )
+              }
             }
-            console.log(pt);
-            this.mainService.addPlayerTexts(pt).subscribe(
-              data => {},
-              error => console.log("Error", error),
-              () => {localStorage.setItem('texts', JSON.stringify(this.texts))}
-            );
-          });
+          }
+        )
       }
     }
   }

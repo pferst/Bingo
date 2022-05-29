@@ -32,6 +32,7 @@ export class BoardFieldComponent implements OnInit {
 
   choose(): void {
     this.checked = !this.checked;
+    console.log(this.checked);
     if(!this.checked)
     {
       const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {

@@ -77,6 +77,10 @@ export class MainService {
     localStorage.setItem('lastRequest', moment.now().toString());
     return this.http.get<IText[]>(this.API.text);
   }
+  getText(id: number) {
+    localStorage.setItem('lastRequest', moment.now().toString());
+    return this.http.get<IText>(`${this.API.text}/${id}`);
+  }
   addTexts(texts: IText[]) {
     localStorage.setItem('lastRequest', moment.now().toString());
     let textsAPI = [];
