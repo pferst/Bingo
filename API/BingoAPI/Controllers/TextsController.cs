@@ -92,7 +92,10 @@ namespace BingoAPI.Controllers
             }
             foreach (Text text in texts)
             {
-                _context.Texts.Add(text);
+                var already = _context.Texts.Where(x => x.Value == text.Value).ToList();
+                if (already.Count==0)
+                    _context.Texts.Add(text);
+                else text.Id = already[0].Id;
             }
 
             await _context.SaveChangesAsync();

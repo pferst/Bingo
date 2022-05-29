@@ -12,12 +12,14 @@ const routes: Routes = [
   {
     path: 'join',
     component: JoinGameComponent,
-    canActivate: [GameAuthGuard]
+    canActivate: [GameAuthGuard],
+    canLoad: [GameAuthGuard],
   },
   {
     path: 'create',
     component: CreateGameComponent,
-    canActivate: [GameAuthGuard]
+    canActivate: [GameAuthGuard],
+    canLoad: [GameAuthGuard],
   },
   {
     path: ':name#:id',
@@ -26,7 +28,8 @@ const routes: Routes = [
   {
     path: '',
     component: JoinCreateComponent,
-    canActivate: [GameAuthGuard]
+    canActivate: [GameAuthGuard],
+    canLoad: [GameAuthGuard],
   }
 ];
 

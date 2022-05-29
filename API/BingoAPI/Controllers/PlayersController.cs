@@ -29,7 +29,7 @@ namespace BingoAPI.Controllers
           {
               return NotFound();
           }
-            return await _context.Players.ToListAsync();
+            return await _context.Players.OrderBy(player => player.Position).ToListAsync();
         }
 
         // GET: api/Players/5
@@ -48,6 +48,24 @@ namespace BingoAPI.Controllers
             }
 
             return player;
+        }
+        // GET: api/Players?gameId=3
+        [HttpGet("gameId={gameId}")]
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayersByGame(int gameId)
+        {
+            if (_context.Players == null)
+            {
+                return NotFound();
+            }
+            var players = await _context.Players.Where(player => player.GameId == gameId).ToListAsync();
+            //var player = await _context.Players.FindAsync(id);
+
+            if (players == null)
+            {
+                return NotFound();
+            }
+
+            return players;
         }
 
         // PUT: api/Players/5

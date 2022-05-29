@@ -1,4 +1,36 @@
-<app-board
-  [texts]="texts"
-  class="self-center"
-></app-board>
+<mat-toolbar class="flex justify-between">
+  <button mat-icon-button type="button" aria-label="sidenav" (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="flex flex-col items-center">
+    <div class="text-xs text-slate-600 italic capitalize">Place/Points</div>
+    <div>{{user.position}}/{{user.points}}</div>
+  </div>
+
+  <button mat-flat-button color="warn" type="button" aria-label="quit game" (click)="leaveGame(user)">
+    <p class="inline">Quit </p>
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-drawer-container class="example-container" [hasBackdrop]="false">
+  <mat-drawer #drawer mode="side" class="flex flex-col justify-center w-full md:w-1/3">
+    <button mat-icon-button type="button" class="example-icon" aria-label="Example icon-button with menu icon" (click)="drawer.toggle()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-tab-group dynamicHeight mat-align-tabs="center">
+      <mat-tab label="Scores">
+        <app-scoreboard
+          [players]="players"
+          class="w-full"
+        ></app-scoreboard>
+      </mat-tab>
+      <mat-tab label="kicks"> Kicks </mat-tab>
+    </mat-tab-group>
+  </mat-drawer>
+  <app-board
+    [texts]="texts"
+    (refresh)="refreshPlayers()"
+    class="self-center"
+  ></app-board>
+</mat-drawer-container>

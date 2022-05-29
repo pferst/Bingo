@@ -1,3 +1,8 @@
+<div class="absolute top-[95px] z-50 left-2 md:top-[8 0px]">
+  <button mat-mini-fab color="accent" (click)="mainService.redirectToHome()" class="flex justify-center items-center">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</div>
 <h1>Create your own game</h1>
 <mat-divider class="w-full"></mat-divider>
 <form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-start items-center flex-col w-full md:w-1/5 overflow-scroll py-3">
@@ -6,7 +11,7 @@
     <input matInput placeholder="Server name" formControlName="gameId" maxlength="10" minlength="1" required>
   </mat-form-field>
 <!--  <div class="flex justify-around items-baseline w-4/5 mt-4">-->
-    <h2>Bingo passwords</h2>
+    <h2>Bingo phrases</h2>
 <!--  </div>-->
   <table class="mb-10">
     <thead>
@@ -22,7 +27,7 @@
       <td class="mr-4">
         <mat-form-field appearance="outline">
           <textarea matInput
-                    placeholder="text"
+                    placeholder="{{'phrase #'+(i+1)}}"
                     formControlName="value"
                     maxlength="250"
                     minlength="1"
