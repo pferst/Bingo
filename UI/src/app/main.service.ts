@@ -9,6 +9,7 @@ import {IText} from "./Models/IText";
 import {IGameText} from "./Models/IGameText";
 import * as moment from "moment";
 import {IPlayerText} from "./Models/IPlayerText";
+import {IKickPlayer} from "./Models/IKickPlayer";
 
 @Injectable({
   providedIn: 'root'
@@ -130,5 +131,25 @@ export class MainService {
       textsAPI.push(el);
     }
     return this.http.post(this.API.playerTexts, textsAPI);
+  }
+
+  // KickPlayers
+  getKickPlayers(id: number): Observable<IKickPlayer[]> {
+    localStorage.setItem('lastRequest', moment.now().toString());
+    return this.http.get<IKickPlayer[]>(`${this.API.kickPlayers}/game/${id}`);
+  }
+  addKickPlayer(playerId: number, gameId: number) {
+    localStorage.setItem('lastRequest', moment.now().toString());
+    return this.http.post(this.API.kickPlayers, {playerId: playerId, gameId: gameId, f1: 1, f2: 0});
+  }
+  udpateKickPlayer(player: IKickPlayer, kick: boolean) {
+    localStorage.setItem('lastRequest', moment.now().toString());
+    if(kick){
+      return this.http.put(`${this.API.kickPlayers}/f1/${player.playerId}`, {playerId: player.playerId, gameId: player.gameId, f1: 1, f2: 0});
+    }
+    return this.http.put(`${this.API.kickPlayers}/f2/${player.playerId}`, {playerId: player.playerId, gameId: player.gameId, f1: 0, f2: 1});
+  }
+  deleteKickPLayer(id: number) {
+    return this.http.delete(`${this.API.kickPlayers}/${id}`);
   }
 }

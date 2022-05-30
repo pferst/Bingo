@@ -10,6 +10,7 @@ export const environment = {
   text: "https://localhost:7185/api/texts",
   gameText: "https://localhost:7185/api/GameTexts",
   playerTexts: "https://localhost:7185/api/PlayerTexts",
+  kickPlayers: "https://localhost:7185/api/PlayersKicks"
 };
 
 /*

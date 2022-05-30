@@ -1,5 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IPlayer} from "../../../../Models/IPlayer";
+import {MainService} from "../../../../main.service";
+import {IKickPlayer} from "../../../../Models/IKickPlayer";
 
 @Component({
   selector: 'app-scoreboard',
@@ -9,11 +11,16 @@ import {IPlayer} from "../../../../Models/IPlayer";
 export class ScoreboardComponent implements OnInit {
 
   @Input() players: IPlayer[];
-  columnsToDisplay = ['position', 'name', 'points'];
+  @Output() vote: EventEmitter<IPlayer> = new EventEmitter<IPlayer>();
+  @Input() voted: boolean;
+  columnsToDisplay = ['position', 'crown', 'name', 'points', 'kick'];
 
-  constructor() { }
+  constructor(private mainService: MainService) { }
 
   ngOnInit(): void {
   }
 
+  voteKick(player: IPlayer) {
+    this.vote.emit(player);
+  }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using BingoAPI;
 
 namespace BingoAPI.Data
 {
@@ -14,6 +15,7 @@ namespace BingoAPI.Data
 
         public DbSet<PlayerText> PlayerTexts { get; set; }
         public DbSet<GameText> GameTexts { get; set; }
+        public DbSet<PlayersKick> PlayersKick { get; set; }
 
     }
 }
