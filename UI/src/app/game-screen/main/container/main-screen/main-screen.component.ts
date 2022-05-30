@@ -19,6 +19,7 @@ export class MainScreenComponent implements OnInit, OnDestroy {
   players: Array<IPlayer> = [];
   user: IPlayer = null;
   sub: Subscription;
+  nonConnection: number = 0;
 
   constructor(private mainService: MainService, public dialog: MatDialog) {
     this.sub = interval(10000)
@@ -160,13 +161,24 @@ export class MainScreenComponent implements OnInit, OnDestroy {
           this.players.sort((a,b) => (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0))
         },
         error => {
+          this.nonConnection++;
           console.log("Error", error);
+          if(error.status === 404 || this.nonConnection>=9) {
+            // this.nonConnection=0;
+            localStorage.removeItem('player');
+            localStorage.removeItem('texts');
+            localStorage.removeItem('lastRequest');
+            // this.ngOnDestroy();
+            this.mainService.redirectToHome();
+          }
         },
         () => {
           this.mainService.getPlayer(player.id).subscribe(
             data => player = data as IPlayer,
             error => {
-              if(error.status === 404) {
+              this.nonConnection++;
+              if(error.status === 404 || this.nonConnection>=9) {
+                // this.nonConnection=0;
                 localStorage.removeItem('player');
                 localStorage.removeItem('texts');
                 localStorage.removeItem('lastRequest');
