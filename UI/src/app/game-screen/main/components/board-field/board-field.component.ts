@@ -38,21 +38,23 @@ export class BoardFieldComponent implements OnInit, AfterViewInit {
   }
 
   choose(reload: boolean = false): void {
-    this.checked = !this.checked;
+    // this.checked = !this.checked;
     console.log(this.checked);
-    if(!this.checked && !reload)
+    if(this.checked && !reload)
     {
-      const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
         data: this.data.value,
       });
-      dialogRef.afterClosed().subscribe(result => {
-        if(result) this.sendRequest(reload);
-        else {console.log("Nie"); this.choose();}
+      // dialogRef.
+      dialogRef.beforeClosed().subscribe(result => {
+        if(result && this.checked) {this.checked = !this.checked; this.sendRequest(reload);}
+        else {console.log("Nie"); dialogRef=null;}
       })
       console.log("out");
     }
     else
     {
+      this.checked = !this.checked;
       this.renderer.setStyle(this.field.nativeElement, 'backgroundColor', 'rgb(221, 158, 205)');
       if(!reload) this.mark.emit({to_check: this.checked, answer: this.data});
     }

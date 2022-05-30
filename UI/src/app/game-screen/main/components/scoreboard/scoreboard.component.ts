@@ -9,7 +9,7 @@ import {IPlayer} from "../../../../Models/IPlayer";
 export class ScoreboardComponent implements OnInit {
 
   @Input() players: IPlayer[];
-  columnsToDisplay = ['position', 'name', 'points'];
+  columnsToDisplay = ['position', 'crown', 'name', 'points'];
 
   constructor() { }
 
