@@ -5,7 +5,7 @@
 
   <div class="flex flex-col items-center">
     <div class="text-xs text-slate-600 italic capitalize">Place/Points</div>
-    <div>{{user.position}}/{{user.points}}</div>
+    <div *ngIf="user">{{user.position}}/{{user.points}}</div>
   </div>
 
   <button mat-flat-button color="warn" type="button" aria-label="quit game" (click)="leaveGame(user)">

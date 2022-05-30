@@ -11,6 +11,7 @@ import {IKickPlayer} from "../../../../Models/IKickPlayer";
 import * as moment from "moment";
 import {SnackBarComponent} from "../../../../snack-bar/snack-bar.component";
 import {KickoutDialogComponent} from "../../components/kickout-dialog/kickout-dialog.component";
+import {conditionallyCreateMapObjectLiteral} from "@angular/compiler/src/render3/view/util";
 
 
 
@@ -46,7 +47,8 @@ export class MainScreenComponent implements OnInit, OnDestroy {
     localStorage.removeItem('lastRequest');
     localStorage.removeItem('voted');
     localStorage.removeItem('kicks');
-    this.mainService.deletePlayer(this.user.id);
+    if(this.user)
+      this.mainService.deletePlayer(this.user.id);
   }
 
   ngOnDestroy() {
@@ -162,14 +164,28 @@ export class MainScreenComponent implements OnInit, OnDestroy {
   }
 
   leaveGame(user: IPlayer) {
+    let player = user;
     let dialogRef = this.dialog.open(CloseDialogComponent)
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        let last = this.players.length;
         this.mainService.deletePlayer(user.id).subscribe(
           data => {},
           error => console.log("Error", error),
-          () => {this.clearStorage(); this.mainService.redirectToHome();}
-        )
+          () => {
+            this.clearStorage();
+            if(last<=1)
+            {
+              this.mainService.deleteGame(player.gameId).subscribe(
+                data => {},
+                error => console.log("Error", error),
+                () => {
+                    this.mainService.redirectToHome();
+                }
+              )
+            }
+            else this.mainService.redirectToHome();
+          });
       }
       dialogRef = null;
     })
@@ -374,4 +390,3 @@ export class MainScreenComponent implements OnInit, OnDestroy {
   }
 
 }
-
