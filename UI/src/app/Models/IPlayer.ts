@@ -7,4 +7,6 @@ export interface IPlayer {
   position?: number;
   gameId: number;
   texts?: IText[];
+  voteKick?: boolean;
+  voted?: boolean;
 }

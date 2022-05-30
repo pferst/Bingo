@@ -91,6 +91,35 @@ namespace BingoAPI.Migrations
                     b.ToTable("Players");
                 });
 
+            modelBuilder.Entity("BingoAPI.PlayersKick", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("F1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("F2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("PlayersKick");
+                });
+
             modelBuilder.Entity("BingoAPI.PlayerText", b =>
                 {
                     b.Property<int>("ID")
@@ -163,6 +192,25 @@ namespace BingoAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("BingoAPI.PlayersKick", b =>
+                {
+                    b.HasOne("BingoAPI.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BingoAPI.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("BingoAPI.PlayerText", b =>

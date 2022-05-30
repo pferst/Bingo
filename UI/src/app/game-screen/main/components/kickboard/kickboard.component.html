@@ -1,0 +1,23 @@
+<table mat-table [dataSource]="players" class="w-full">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let player"> {{player.playerName}} </td>
+  </ng-container>
+  <ng-container matColumnDef="count">
+    <th mat-header-cell *matHeaderCellDef> Results </th>
+    <td mat-cell *matCellDef="let player"> {{player.f1}}/{{all}} </td>
+  </ng-container>
+  <ng-container matColumnDef="f1">
+    <th mat-header-cell *matHeaderCellDef> Kick </th>
+    <td mat-cell *matCellDef="let player">
+      <button mat-flat-button type="button" [disabled]="player.voted ?? false" (click)="vote(player)">
+        <mat-icon>
+          done
+        </mat-icon>
+      </button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+</table>
+

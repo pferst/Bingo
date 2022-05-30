@@ -15,7 +15,6 @@ export class GameAuthGuard implements CanActivate, CanLoad {
   constructor(private router: Router, private mainService: MainService, private _snackBar: SnackBarComponent) {
   }
   canLoad(): boolean {
-    console.log("działa");
     return this.canActivate();
   }
 
