@@ -5,7 +5,7 @@
 </div>
 <h1>Create your own game</h1>
 <mat-divider class="w-full"></mat-divider>
-<form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-start items-center flex-col w-full md:w-1/5 overflow-scroll py-3">
+<form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-start items-center flex-col w-full md:w-1/5 py-3">
   <mat-form-field appearance="outline">
     <mat-label>Enter name for your server</mat-label>
     <input matInput placeholder="Server name" formControlName="gameId" maxlength="10" minlength="1" required>

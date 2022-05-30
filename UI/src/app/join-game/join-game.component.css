@@ -1,0 +1,7 @@
+:host{
+  @apply flex w-full flex-col items-center mt-6;
+  height: calc(100% - 24px);
+}
+form {
+  @apply h-full
+}

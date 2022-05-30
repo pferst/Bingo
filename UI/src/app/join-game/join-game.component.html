@@ -1,13 +1,21 @@
-<form [formGroup]="gameDetails" class="flex justify-center items-center flex-col w-full h-full">
+<div class="absolute top-[95px] z-50 left-2 md:top-[8 0px]">
+  <button mat-mini-fab color="accent" (click)="mainService.redirectToHome()" class="flex justify-center items-center">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</div>
+<h1>Join to the game!</h1>
+<mat-divider class="w-full"></mat-divider>
+<form [formGroup]="gameDetails" (ngSubmit)="onSubmit()" class="flex justify-center items-center flex-col w-full md:w-1/5">
   <mat-form-field appearance="outline">
     <mat-label>Enter game id</mat-label>
     <input matInput placeholder="game ID" formControlName="gameId" required>
-    <mat-error *ngIf="gameDetails.invalid">{{getErrorMessage()}}</mat-error>
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>Enter your name</mat-label>
     <input matInput placeholder="game ID" formControlName="playerName" required>
-<!--    <mat-error *ngIf="gameDetails.invalid">{{getErrorMessage()}}</mat-error>-->
   </mat-form-field>
   <button mat-flat-button type="submit" color="primary" [disabled]="!gameDetails.valid">JOIN</button>
+  <mat-error class="pl-6 pr-6 pb-4 pt-2">
+    {{error}}
+  </mat-error>
 </form>

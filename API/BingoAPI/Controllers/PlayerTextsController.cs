@@ -52,7 +52,7 @@ namespace BingoAPI.Controllers
         }
 
         // PUT: api/PlayerTexts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754AA
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPlayerText(int id, PlayerText playerText)
         {
@@ -61,52 +61,42 @@ namespace BingoAPI.Controllers
                 return BadRequest();
             }
 
-            var playerTextGot = _context.PlayerTexts.Where(x => x.PlayerId == playerText.PlayerId && x.TextId == playerText.TextId).Take(1).ToList();
-            playerTextGot[0].Checked = playerText.Checked;
+            var playerTextGot = _context.PlayerTexts.Where(x => x.PlayerId == playerText.PlayerId && x.TextId == playerText.TextId).First();
+            playerTextGot.Checked = playerText.Checked;
             Player playerInfo = _context.Players.Where(x => x.Id == playerText.PlayerId).First();
 
             playerInfo.Points = playerText.Checked ? playerInfo.Points + 1 : playerInfo.Points - 1;
-            var playersFromGame = _context.Players.Where(x => x.GameId == playerInfo.GameId).OrderBy(player => player.Position).ToList();
-            if (playersFromGame.Count > 1)
+            IOrderedQueryable<Player>? playersFromGame = _context.Players.Where(x => x.GameId == playerInfo.GameId).OrderByDescending(x => x.Position);
+            
+            if (playerText.Checked && playersFromGame!=null)
             {
-                if (playerText.Checked)
+                foreach(Player x in playersFromGame)
                 {
-                    bool flagUp = true;
-                    for (int i = 0; i < playersFromGame.Count; i++)
+                    if (playerInfo.Position > x.Position && playerInfo.Points > x.Points && playerInfo.Id != x.Id)
                     {
-                        if (playerText.Checked && playerInfo.Points > playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
-                        {
-                            if (flagUp)
-                            {
-                                playerInfo.Position = playersFromGame[i].Position;
-                                flagUp = false;
-                            }
-                            playersFromGame[i].Position++;
-                        }
+                        var temp = playerInfo.Position;
+                        playerInfo.Position = x.Position;
+                        x.Position = temp;
                     }
-                    if (flagUp)
+                    else if (playerInfo.Position > x.Position && playerInfo.Id != x.Id && playerInfo.Points <= x.Points)
                     {
-                        playerInfo.Position = playersFromGame.Last().Position + 1;
-                    }
-                }
-                else
-                {
-                    //bool flagDown = false;
-                    for (int i = 0; i < playersFromGame.Count; i++)
-                    {
-                        if (playerInfo.Points <= playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
-                        {
-                            (playerInfo.Position, playersFromGame[i].Position) = (playersFromGame[i].Position, playerInfo.Position);
-                        }
+                        break;
                     }
                 }
             }
-            else
+            else if(playersFromGame != null)
             {
-                playerInfo.Position = 1;
+                playersFromGame = _context.Players.Where(x => x.GameId == playerInfo.GameId).OrderBy(x => x.Position);
+                foreach (Player x in playersFromGame)
+                {
+                    if (playerInfo.Points <= x.Points && playerInfo.Position < x.Position && playerInfo.Id != x.Id)
+                    {
+                        (playerInfo.Position, x.Position) = (x.Position, playerInfo.Position);
+                    }
+                }
             }
 
-            _context.Entry(playerTextGot[0]).State = EntityState.Modified;
+            _context.Entry(playerTextGot).State = EntityState.Modified;
             //_context.Entry(playerInfo).State = EntityState.Modified;
             //_context.Entry(playersFromGame).State = EntityState.Modified;
 

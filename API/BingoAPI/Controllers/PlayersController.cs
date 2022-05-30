@@ -67,6 +67,24 @@ namespace BingoAPI.Controllers
 
             return players;
         }
+        // GET: api/Players?gameId=3
+        [HttpGet("gameId={gameId}/{name}")]
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayersByGameAndName(int gameId, string name)
+        {
+            if (_context.Players == null)
+            {
+                return NotFound();
+            }
+            var players = await _context.Players.Where(player => player.GameId == gameId && player.Name.Equals(name)).ToListAsync();
+            //var player = await _context.Players.FindAsync(id);
+
+            if (players == null)
+            {
+                return NotFound();
+            }
+
+            return players;
+        }
 
         // PUT: api/Players/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -131,10 +149,27 @@ namespace BingoAPI.Controllers
             {
                 return NotFound();
             }
-            var player = await _context.Players.FindAsync(id);
+            var player = _context.Players.Find(id);
             if (player == null)
             {
                 return NotFound();
+            }
+            var players = _context.Players.Where(x => x.GameId == player.GameId).OrderByDescending(x => x.Position).ToList();
+            if (players!=null && players.Count > 1)
+            {
+                for (int i = 0; i < players.Count; i++)
+                {
+                    if (players[i].Position > player.Position)
+                    {
+                        players[i].Position -= 1;
+                        await this.PutPlayer(players[i].Id, players[i]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                //_context.Entry(players).State = EntityState.Modified;
             }
 
             _context.Players.Remove(player);
