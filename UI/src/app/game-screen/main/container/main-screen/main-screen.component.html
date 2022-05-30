@@ -25,14 +25,25 @@
       <mat-tab label="Scores">
         <app-scoreboard
           [players]="players"
+          (vote)="voteKick($event)"
+          [voted]="!!voted"
           class="w-full"
         ></app-scoreboard>
       </mat-tab>
-      <mat-tab label="kicks"> Kicks </mat-tab>
+      <mat-tab label="kicks">
+        <app-kickboard
+          [all]="players.length"
+          [players]="kickPlayers"
+          [voted]="voted"
+          (kick)="kick($event)"
+          class="w-full"
+        >
+        </app-kickboard>
+      </mat-tab>
     </mat-tab-group>
   </mat-drawer>
   <div class="flex-col w-full items-center justify-items-center">
-    <h2 *ngIf="players && players[0].points==9">Current Winner: {{players[0].name}}</h2>
+    <h2 *ngIf="winner">Current Winner: {{winner.name}}</h2>
     <app-board
       [texts]="texts"
       (refresh)="refreshPlayers()"

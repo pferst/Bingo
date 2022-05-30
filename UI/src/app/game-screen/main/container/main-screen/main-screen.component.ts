@@ -7,6 +7,11 @@ import {MatDialog} from "@angular/material/dialog";
 import {CloseDialogComponent} from "../../components/close-dialog/close-dialog.component";
 import { Subscription } from "rxjs";
 import { interval } from 'rxjs';
+import {IKickPlayer} from "../../../../Models/IKickPlayer";
+import * as moment from "moment";
+import {SnackBarComponent} from "../../../../snack-bar/snack-bar.component";
+import {KickoutDialogComponent} from "../../components/kickout-dialog/kickout-dialog.component";
+
 
 
 @Component({
@@ -17,19 +22,31 @@ import { interval } from 'rxjs';
 export class MainScreenComponent implements OnInit, OnDestroy {
   texts: Array<IText> = [];
   players: Array<IPlayer> = [];
+  kickPlayers: Array<IKickPlayer> = [];
   user: IPlayer = null;
   sub: Subscription;
   nonConnection: number = 0;
+  voted: {playerId: number, time: string};
+  //sth for store already voted
+  kicks: Array<any> = [];
+  private limit: number = 18;
 
-  constructor(private mainService: MainService, public dialog: MatDialog) {
-    this.sub = interval(10000)
-      .subscribe((val) => { this.refreshPlayers()});
+  winner: IPlayer = this.players.length>0 ? this.players[0].points==9 ? this.players[0] : null : null;
+
+  constructor(private mainService: MainService, public dialog: MatDialog, private _snackBar: SnackBarComponent) {
+    this.sub = interval(5000)
+      .subscribe((val) => {
+        this.refreshPlayers();
+      });
   }
 
   clearStorage() {
     localStorage.removeItem('player');
     localStorage.removeItem('texts');
     localStorage.removeItem('lastRequest');
+    localStorage.removeItem('voted');
+    localStorage.removeItem('kicks');
+    this.mainService.deletePlayer(this.user.id);
   }
 
   ngOnDestroy() {
@@ -38,6 +55,10 @@ export class MainScreenComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.refreshPlayers();
+    const vot = localStorage.getItem('voted');
+    if(vot){
+      this.voted = JSON.parse(vot);
+    }
     //list of texts
     const textsStr: string = localStorage.getItem('texts');
     if(textsStr)
@@ -164,12 +185,13 @@ export class MainScreenComponent implements OnInit, OnDestroy {
         data => {
           this.players = data as IPlayer[];
           //sort array to be sure it's sorted
-          this.players.sort((a,b) => (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0))
+          this.players.sort((a,b) => (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0));
+          this.winner = this.players[0].points==9 ? this.players[0] : null;
         },
         error => {
           this.nonConnection++;
           console.log("Error", error);
-          if(error.status === 404 || this.nonConnection>=9) {
+          if(error.status === 404 || this.nonConnection>=this.limit) {
             // this.nonConnection=0;
             this.clearStorage();
             // this.ngOnDestroy();
@@ -181,8 +203,9 @@ export class MainScreenComponent implements OnInit, OnDestroy {
             data => player = data as IPlayer,
             error => {
               this.nonConnection++;
-              if(error.status === 404 || this.nonConnection>=9) {
+              if(error.status === 404 || this.nonConnection>=this.limit) {
                 // this.nonConnection=0;
+                this.dialog.open(KickoutDialogComponent);
                 this.clearStorage();
                 // this.ngOnDestroy();
                 this.mainService.redirectToHome();
@@ -190,12 +213,164 @@ export class MainScreenComponent implements OnInit, OnDestroy {
             },
             () => {
               this.user = player;
-              localStorage.setItem('player', JSON.stringify(this.user))
+              localStorage.setItem('player', JSON.stringify(this.user));
+              this.mainService.getKickPlayers(this.user.gameId).subscribe(
+                data => {
+                  this.kickPlayers=data;
+                  const votedStr = localStorage.getItem('kicks');
+                  if(votedStr)
+                  {
+                    const vv = JSON.parse(votedStr);
+                    vv.forEach(item => {
+                      const index = this.getKickPlayer(item.playerId);
+                      if(index>=0)
+                      {
+                        this.kickPlayers[index].voted=true;
+                      }
+                    });
+                  }
+                },
+                error => console.log("Error", error),
+                () => {
+                  // load players names into kick players
+                  this.kickPlayers.forEach(x => {
+                    for(let i = 0; i < this.players.length; i++)
+                    {
+                      if(x.playerId==this.players[i].id)
+                      {
+                        x.playerName=this.players[i].name;
+                      }
+                    }
+                  });
+                  // timed on vote after 2 minutes
+                  // delete from localstorage
+                  // delete from database
+                  const f1 = localStorage.getItem('voted');
+                  if(f1) {
+                    const voted = JSON.parse(f1);
+                    const time: number = +voted.time;
+                    let duration = moment.duration(moment().diff(time));
+                    const mins = duration.asMinutes();
+                    if (mins > 2) {
+                      this.mainService.deleteKickPLayer(voted.playerId).subscribe(
+                        data => {
+                          console.log(data);
+                        },
+                        error => {
+                          console.log("Error", error);
+                          this.voted = null;
+                          localStorage.removeItem('voted');
+                        },
+                        () => {
+                          this.voted = null;
+                          localStorage.removeItem('voted');
+                          this._snackBar.openSnackBar("Voting timed out");
+                        }
+                      );
+                    }
+                  }
+
+                }
+              )
             }
           )
         }
       );
     }
+  }
+
+  private getPlayer(playerId: number){
+    for (let i = 0; i < this.players.length; i++)
+    {
+      if(this.players[i].id==playerId)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
+  private getKickPlayer(playerId: number) {
+    for (let i = 0; i < this.kickPlayers.length; i++)
+    {
+      if(this.kickPlayers[i].playerId==playerId)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  voteKick(player: IPlayer) {
+    let temp = null;
+    this.mainService.addKickPlayer(player.id, player.gameId).subscribe(
+      data => temp = data,
+      error => console.log("Error", error),
+      () => {
+        if(temp!=null)
+        {
+          console.log("VOTED!");
+          this.voted = {playerId: player.id, time: moment.now().toString()};
+          const strKicks = localStorage.getItem('kicks');
+          let kk = this.kicks;
+          if(strKicks)
+          {
+            kk = JSON.parse(strKicks);
+          }
+          kk.push(this.voted);
+          this.kicks = kk;
+          localStorage.setItem('kicks', JSON.stringify(this.kicks));
+          localStorage.setItem('voted', JSON.stringify(this.voted));
+          this.refreshPlayers();
+        }
+      }
+    )
+  }
+
+  kick(player: IKickPlayer) {
+    this.mainService.udpateKickPlayer(player, true).subscribe(
+      data => {},
+      error => console.log("Error", error),
+      () => {
+        const str = localStorage.getItem('kicks');
+        let data = [];
+        if(str)
+        {
+          data = JSON.parse(str);
+        }
+        data.push(player);
+        this.kicks=data;
+        localStorage.setItem('kicks', JSON.stringify(data));
+        if((player.f1+1)/this.players.length > 0.5)
+        {
+          this.kickPlayer(player.playerId);
+        }
+      }
+    )
+  }
+
+  kickPlayer(playerId: number) {
+    const str = localStorage.getItem('kicks');
+    let data = [];
+    if(str)
+    {
+      data = JSON.parse(str);
+    }
+    for(let i = 0; i < data.length; i++)
+    {
+      if(data[i].playerId==playerId)
+      {
+        data = data.splice(i,  1);
+        break;
+      }
+    }
+    this.voted=null;
+    this.kicks = data;
+    localStorage.setItem('kicks', JSON.stringify(data));
+    this.mainService.deletePlayer(playerId).subscribe(
+      data => {},
+      error => console.log("Error", error),
+      () => this.refreshPlayers()
+    )
   }
 
 }

@@ -15,6 +15,16 @@
     <th mat-header-cell *matHeaderCellDef> Points </th>
     <td mat-cell *matCellDef="let player"> {{player.points}} </td>
   </ng-container>
+  <ng-container matColumnDef="kick">
+    <th mat-header-cell *matHeaderCellDef> Vote kick </th>
+    <td mat-cell *matCellDef="let player">
+      <button mat-flat-button color="warn" [disabled]="voted" (click)="voteKick(player)">
+        <mat-icon>
+          delete
+        </mat-icon>
+      </button>
+    </td>
+  </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
   <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>

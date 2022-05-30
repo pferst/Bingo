@@ -31,6 +31,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { CloseDialogComponent } from './game-screen/main/components/close-dialog/close-dialog.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { KickboardComponent } from './game-screen/main/components/kickboard/kickboard.component';
+import { KickoutDialogComponent } from './game-screen/main/components/kickout-dialog/kickout-dialog.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     SnackBarComponent,
     DialogOverviewExampleDialog,
     ScoreboardComponent,
-    CloseDialogComponent
+    CloseDialogComponent,
+    KickboardComponent,
+    KickoutDialogComponent
   ],
   imports: [
     BrowserModule,
