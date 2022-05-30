@@ -154,7 +154,11 @@ export class MainScreenComponent implements OnInit, OnDestroy {
       let player: IPlayer = JSON.parse(playerStr) as IPlayer;
       this.user = player;
       this.mainService.getPlayerList(player.gameId).subscribe(
-        data => this.players = data as IPlayer[],
+        data => {
+          this.players = data as IPlayer[];
+          //sort array to be sure it's sorted
+          this.players.sort((a,b) => (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0))
+        },
         error => {
           console.log("Error", error);
         },
