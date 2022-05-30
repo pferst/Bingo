@@ -26,6 +26,12 @@ export class MainScreenComponent implements OnInit, OnDestroy {
       .subscribe((val) => { this.refreshPlayers()});
   }
 
+  clearStorage() {
+    localStorage.removeItem('player');
+    localStorage.removeItem('texts');
+    localStorage.removeItem('lastRequest');
+  }
+
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
@@ -45,7 +51,7 @@ export class MainScreenComponent implements OnInit, OnDestroy {
       const playerStr: string|null = localStorage.getItem('player');
       if(!playerStr)
       {
-        localStorage.clear();
+        this.clearStorage();
         this.mainService.redirectToHome();
       }
       else {
@@ -69,7 +75,7 @@ export class MainScreenComponent implements OnInit, OnDestroy {
                 () => {
                   if(gameTexts==null)
                   {
-                    localStorage.clear();
+                    localStorage.removeItem('');
                     this.mainService.redirectToHome();
                   }
                   console.log(gameTexts);
@@ -141,7 +147,7 @@ export class MainScreenComponent implements OnInit, OnDestroy {
         this.mainService.deletePlayer(user.id).subscribe(
           data => {},
           error => console.log("Error", error),
-          () => {localStorage.clear(), this.mainService.redirectToHome()}
+          () => {this.clearStorage(); this.mainService.redirectToHome();}
         )
       }
       dialogRef = null;
@@ -165,9 +171,7 @@ export class MainScreenComponent implements OnInit, OnDestroy {
           console.log("Error", error);
           if(error.status === 404 || this.nonConnection>=9) {
             // this.nonConnection=0;
-            localStorage.removeItem('player');
-            localStorage.removeItem('texts');
-            localStorage.removeItem('lastRequest');
+            this.clearStorage();
             // this.ngOnDestroy();
             this.mainService.redirectToHome();
           }
@@ -179,9 +183,7 @@ export class MainScreenComponent implements OnInit, OnDestroy {
               this.nonConnection++;
               if(error.status === 404 || this.nonConnection>=9) {
                 // this.nonConnection=0;
-                localStorage.removeItem('player');
-                localStorage.removeItem('texts');
-                localStorage.removeItem('lastRequest');
+                this.clearStorage();
                 // this.ngOnDestroy();
                 this.mainService.redirectToHome();
               }

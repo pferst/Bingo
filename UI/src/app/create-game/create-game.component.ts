@@ -23,6 +23,7 @@ export class CreateGameComponent implements OnInit {
   allTexts: string[] = [];
   filteredTexts: string[];
   exactText: FormControl = new FormControl();
+  lastTexts: IText[] | null = null;
 
   constructor(private fb: FormBuilder, public mainService: MainService, private router: Router, public _snackBar: SnackBarComponent) {
     this.gameDetails = this.fb.group({
@@ -47,8 +48,26 @@ export class CreateGameComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const lastUsed = localStorage.getItem('lastTexts');
+    if(lastUsed)
+    {
+      this.lastTexts = JSON.parse(lastUsed) as IText[];
+    }
     this.filteredTexts = this.allTexts;
+  }
 
+  loadLast() {
+    let {texts} = this.gameDetails.value;
+    if(this.lastTexts.length > texts.length)
+    {
+      for(let i = 0; i < this.lastTexts.length-texts.length; i++)
+      {
+        this.texts.push(this.createText());
+      }
+    }
+    this.gameDetails.patchValue({
+      texts: this.lastTexts
+    });
   }
 
   private _filter(value: string): string[] {
@@ -143,6 +162,7 @@ export class CreateGameComponent implements OnInit {
             console.log("Error", error)
           },
           () => {
+            localStorage.setItem('lastTexts', JSON.stringify(textData));
             this.mainService.assignText2game(gameData.id, textData).subscribe(
               data => {
                 //anything

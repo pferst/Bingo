@@ -12,12 +12,16 @@
   </mat-form-field>
 <!--  <div class="flex justify-around items-baseline w-4/5 mt-4">-->
     <h2>Bingo phrases</h2>
+    <button mat-flat-button type="button" color="primary" (click)="loadLast()" [disabled]="!lastTexts">
+      <mat-icon>replay</mat-icon>
+      <p class="inline">Restore last</p>
+    </button>
 <!--  </div>-->
   <table class="mb-10">
     <thead>
     <tr class="w-full flex justify-between">
       <th scope="col" class="flex justify-self-start mr-4">#</th>
-      <th scope="col" class="w-full flex justify-self-start mr-4">Password</th>
+      <th scope="col" class="w-full flex justify-self-start mr-4">Phrase</th>
       <th scope="col" class="flex justify-self-start">Action</th>
     </tr>
     </thead>

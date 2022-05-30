@@ -169,9 +169,7 @@ namespace BingoAPI.Controllers
                         break;
                     }
                 }
-                //_context.Entry(players).State = EntityState.Modified;
             }
-
             _context.Players.Remove(player);
             await _context.SaveChangesAsync();
 
