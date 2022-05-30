@@ -11,6 +11,7 @@ import {IKickPlayer} from "../../../../Models/IKickPlayer";
 export class ScoreboardComponent implements OnInit {
 
   @Input() players: IPlayer[];
+  @Input() user: IPlayer;
   @Output() vote: EventEmitter<IPlayer> = new EventEmitter<IPlayer>();
   @Input() voted: boolean;
   columnsToDisplay = ['position', 'crown', 'name', 'points', 'kick'];

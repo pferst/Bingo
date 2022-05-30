@@ -5,7 +5,14 @@
   </ng-container>
   <ng-container matColumnDef="crown">
     <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let player" > <mat-icon *ngIf="player.position==1 && player.points==9">star</mat-icon> </td>
+    <td mat-cell *matCellDef="let player" >
+      <mat-icon *ngIf="player.position==1 && player.points==9">
+        star
+      </mat-icon>
+      <mat-icon *ngIf="!(player.points==9) && player.id==user.id">
+        person
+      </mat-icon>
+    </td>
   </ng-container>
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Name </th>
