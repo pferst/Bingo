@@ -61,45 +61,42 @@ namespace BingoAPI.Controllers
                 return BadRequest();
             }
 
-            var playerTextGot = _context.PlayerTexts.Where(x => x.PlayerId == playerText.PlayerId && x.TextId == playerText.TextId).Take(1).ToList();
-            playerTextGot[0].Checked = playerText.Checked;
+            var playerTextGot = _context.PlayerTexts.Where(x => x.PlayerId == playerText.PlayerId && x.TextId == playerText.TextId).First();
+            playerTextGot.Checked = playerText.Checked;
             Player playerInfo = _context.Players.Where(x => x.Id == playerText.PlayerId).First();
 
             playerInfo.Points = playerText.Checked ? playerInfo.Points + 1 : playerInfo.Points - 1;
-            var playersFromGame = _context.Players.Where(x => x.GameId == playerInfo.GameId).OrderBy(player => player.Position).ToList();
-            if (playerText.Checked)
+            IOrderedQueryable<Player>? playersFromGame = _context.Players.Where(x => x.GameId == playerInfo.GameId).OrderByDescending(x => x.Position);
+            
+            if (playerText.Checked && playersFromGame!=null)
             {
-                bool flagUp = true;
-                for (int i = 0; i < playersFromGame.Count; i++)
+                foreach(Player x in playersFromGame)
                 {
-                    if (playerInfo.Points > playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
+                    if (playerInfo.Position > x.Position && playerInfo.Points > x.Points && playerInfo.Id != x.Id)
                     {
-                        if (flagUp)
-                        {
-                            playerInfo.Position = playersFromGame[i].Position;
-                            flagUp = false;
-                        }
-                        playersFromGame[i].Position++;
+                        var temp = playerInfo.Position;
+                        playerInfo.Position = x.Position;
+                        x.Position = temp;
+                    }
+                    else if (playerInfo.Position > x.Position && playerInfo.Id != x.Id && playerInfo.Points <= x.Points)
+                    {
+                        break;
                     }
                 }
-                if (flagUp)
-                {
-                    playerInfo.Position = playersFromGame.Last().Position + 1;
-                }
             }
-            else
+            else if(playersFromGame != null)
             {
-                //bool flagDown = false;
-                for (int i = 0; i < playersFromGame.Count; i++)
+                playersFromGame = _context.Players.Where(x => x.GameId == playerInfo.GameId).OrderBy(x => x.Position);
+                foreach (Player x in playersFromGame)
                 {
-                    if (playerInfo.Points <= playersFromGame[i].Points && playerInfo.Id != playersFromGame[i].Id)
+                    if (playerInfo.Points <= x.Points && playerInfo.Position < x.Position && playerInfo.Id != x.Id)
                     {
-                        (playerInfo.Position, playersFromGame[i].Position) = (playersFromGame[i].Position, playerInfo.Position);
+                        (playerInfo.Position, x.Position) = (x.Position, playerInfo.Position);
                     }
                 }
             }
 
-            _context.Entry(playerTextGot[0]).State = EntityState.Modified;
+            _context.Entry(playerTextGot).State = EntityState.Modified;
             //_context.Entry(playerInfo).State = EntityState.Modified;
             //_context.Entry(playersFromGame).State = EntityState.Modified;
 
