@@ -33,6 +33,7 @@ import { CloseDialogComponent } from './game-screen/main/components/close-dialog
 import { MatTabsModule } from '@angular/material/tabs';
 import { KickboardComponent } from './game-screen/main/components/kickboard/kickboard.component';
 import { KickoutDialogComponent } from './game-screen/main/components/kickout-dialog/kickout-dialog.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { KickoutDialogComponent } from './game-screen/main/components/kickout-di
     MatToolbarModule,
     MatSidenavModule,
     MatTabsModule,
+    MatBadgeModule,
   ],
   providers: [MainService, GameAuthGuard],
   bootstrap: [AppComponent]

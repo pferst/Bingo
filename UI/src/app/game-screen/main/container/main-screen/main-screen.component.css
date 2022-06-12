@@ -1,3 +1,6 @@
 :host{
-  @apply flex-auto;
+  @apply flex-auto h-full;
+}
+#sidenav {
+  height: calc(100% - 64px);
 }

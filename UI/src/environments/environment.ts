@@ -4,6 +4,13 @@
 
 export const environment = {
   production: false,
+  // api: "https://192.168.2.2:7185/api",
+  // player: "https://192.168.2.2:7185/api/players",
+  // game: "https://192.168.2.2:7185/api/games",
+  // text: "https://192.168.2.2:7185/api/texts",
+  // gameText: "https://192.168.2.2:7185/api/GameTexts",
+  // playerTexts: "https://192.168.2.2:7185/api/PlayerTexts",
+  // kickPlayers: "https://192.168.2.2:7185/api/PlayersKicks"
   api: "https://localhost:7185/api",
   player: "https://localhost:7185/api/players",
   game: "https://localhost:7185/api/games",

@@ -389,4 +389,8 @@ export class MainScreenComponent implements OnInit, OnDestroy {
     )
   }
 
+  filterFunction() {
+    return this.kickPlayers.filter(x => x.voted!=true);
+  }
+
 }
